@@ -71,7 +71,7 @@ export default function Navbar() {
                   {navigationLinks.map((link, index) => (
                     <NavigationMenuItem key={index} className="w-full">
                       <NavigationMenuLink
-                        href={link.href}
+                        href={link.href} asChild
                         className="py-1.5"
                       >
                         <Link to={link.href}>{link.label}</Link>
@@ -93,7 +93,7 @@ export default function Navbar() {
                 {navigationLinks.map((link, index) => (
                   <NavigationMenuItem key={index}>
                     <NavigationMenuLink
-
+                      asChild
                       href={link.href}
                       className="text-muted-foreground hover:text-primary py-1.5 font-medium"
                     >

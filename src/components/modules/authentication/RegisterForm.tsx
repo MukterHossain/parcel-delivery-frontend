@@ -2,23 +2,64 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 import { Input } from "@/components/ui/input";
-import Password from "@/components/ui/passwor";
-import { cn } from "@/lib/utils";
 
+import { cn } from "@/lib/utils";
+import { z } from "zod";
+import {zodResolver} from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
+import Password from "@/components/ui/Passwor";
+import { useRegisterMutation } from "@/redux/feature/auth/auth.api";
+import { toast } from "sonner";
 
+
+const registerSchema = z.object({
+  name: z.string().min(3, {error: "Name is too short"}).max(50),
+  email: z.email(),
+  password: z.string().min(8, {error: "Password is too short"}),
+  confirmPassword: z.string().min(8, {error: "Confirm Password is too short"})
+
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Password do not match",
+    path: ['confirmPassword']
+})
 
 export default function RegisterForm({
     className,
     ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
+const [register] = useRegisterMutation()
 
+  const form = useForm<z.infer<typeof registerSchema>>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: ""
+    }
+  })
 
-  const form = useForm()
+  const onSubmit = async(data: z.infer<typeof registerSchema>) => {
 
-  const onSubmit = (data: any) => {
-    console.log(data)
+    const userInfo = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      role: "SENDER",
+      auths: [{
+        provider: "credential",
+        providerId: data.email
+      }]
+    }
+    console.log(userInfo)
+    try {
+      const res = await register(userInfo).unwrap()
+      console.log(res)
+      toast.success("User Created Successfully")
+    } catch (error) {
+      console.error(error)
+    }
   }
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -30,7 +71,7 @@ export default function RegisterForm({
             </div>
             <div className="grid gap-6">
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                         <FormField
                             name="name"
                             render={({ field }) => (
@@ -64,8 +105,6 @@ export default function RegisterForm({
                                     <FormLabel>Password</FormLabel>
                                     <FormControl>
                                         <Password {...field}></Password>
-                                        {/* <Input placeholder="********" 
-                                        type="password" {...field} /> */}
                                     </FormControl>
                                     <FormDescription className="sr-only">This is your public display name.</FormDescription>
                                     <FormMessage />
@@ -78,8 +117,7 @@ export default function RegisterForm({
                                 <FormItem>
                                     <FormLabel>Confirm Password</FormLabel>
                                     <FormControl>
-                                        {/* <Password {...field}></Password> */}
-                                        <Input placeholder="********" type="password" {...field} />
+                                        <Password {...field}></Password>
                                     </FormControl>
                                     <FormDescription className="sr-only">This is your public display name.</FormDescription>
                                     <FormMessage />

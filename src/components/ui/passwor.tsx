@@ -12,7 +12,6 @@ export default function Password({...field}) {
 
   return (
     <div className="*:not-first:mt-2">
-      {/* <Label htmlFor={id}>Show/hide password input</Label> */}
       <div className="relative">
         <Input
           id={id}
