@@ -1,4 +1,4 @@
-// import Logo from "@/components/navbar-components/logo"
+import Logo from "@/assets/logo/Logo.png"
 import { Button } from "@/components/ui/button"
 import {
   NavigationMenu,
@@ -17,15 +17,16 @@ import { ModeToggle } from "./ModeToggle"
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
   { href: "/", label: "Home", },
-  { href: "/about", label: "About",  },
+  { href: "/about", label: "About", },
   // { href: "/tours", label: "Tours", role: "PUBLIC" },
+  { href: "/admin", label: "Dashboard", },
   // { href: "/admin", label: "Dashboard", role: role.admin },
- 
+
 ]
 
 export default function Navbar() {
   return (
-    <header className="border-b px-4 md:px-6">
+    <header className="border-b px-4 ">
       <div className="flex h-16 items-center justify-between gap-4">
         {/* Left side */}
         <div className="flex items-center gap-2">
@@ -73,7 +74,7 @@ export default function Navbar() {
                         href={link.href}
                         className="py-1.5"
                       >
-                       <Link to={link.href}>{link.label}</Link> 
+                        <Link to={link.href}>{link.label}</Link>
                       </NavigationMenuLink>
                     </NavigationMenuItem>
                   ))}
@@ -83,20 +84,20 @@ export default function Navbar() {
           </Popover>
           {/* Main nav */}
           <div className="flex items-center gap-6">
-            <a href="#" className="text-primary hover:text-primary/90">
-              {/* <Logo /> */}
-            </a>
+            <Link to="/" className="flex items-center gap-2">
+            <img src={Logo} className="h-10 w-12 inline-block" alt="" />
+            </Link>
             {/* Navigation menu */}
             <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="gap-2">
                 {navigationLinks.map((link, index) => (
                   <NavigationMenuItem key={index}>
                     <NavigationMenuLink
-                      
+
                       href={link.href}
                       className="text-muted-foreground hover:text-primary py-1.5 font-medium"
                     >
-                     <Link to={link.href}>{link.label}</Link> 
+                      <Link to={link.href}>{link.label}</Link>
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                 ))}
@@ -104,14 +105,14 @@ export default function Navbar() {
             </NavigationMenu>
           </div>
         </div>
-        {/* Right side */}
+        {/* Right side onClick={handleLogout}*/}
         <div className="flex items-center gap-2">
           <ModeToggle></ModeToggle>
-          <Button asChild variant="ghost" size="sm" className="text-sm">
-            <a href="#">Log In</a>
-          </Button>
-          <Button asChild size="sm" className="text-sm">
-            <a href="#">Logout</a>
+          <Button  variant="outline" className="text-sm">
+                Logout
+              </Button>
+          <Button asChild variant="ghost" className="text-sm">
+            <Link to="/login">Login</Link>
           </Button>
         </div>
       </div>
