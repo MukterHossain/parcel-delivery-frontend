@@ -11,6 +11,12 @@ import { createBrowserRouter, Navigate } from "react-router";
 import { adminSidebar } from "./adminSidebar";
 import { receiverSidebar } from "./receiverSidebar";
 import { senderSidebar } from "./senderSidebar";
+import { withAuth } from "@/utils/withAuth";
+import { role } from "@/constants/role";
+import type { TRole } from "@/types";
+import Feature from "@/components/modules/feature/Feature";
+import Contact from "@/components/modules/contact/Contact";
+import Faq from "@/components/modules/faq/Faq";
 
 
 export const router = createBrowserRouter([
@@ -26,22 +32,23 @@ export const router = createBrowserRouter([
                 path: '/about',
                 Component: About
             },
-        ]
-    },
-    {
-        path: "/admin",
-        Component: DashboardLayout,
-        children: [
             {
-                index:true,
-                element: <Navigate to="/admin/analytics"></Navigate>
+                path: '/feature',
+                Component: Feature
             },
-            ...generateRoutes(adminSidebar)
+            {
+                path: '/contact',
+                Component: Contact
+            },
+            {
+                path: '/faq',
+                Component: Faq
+            },
         ]
     },
     {
         path: "/admin",
-        Component: DashboardLayout,
+        Component: withAuth(DashboardLayout, role.ADMIN as TRole),
         children: [
             {
                 index:true,
@@ -52,7 +59,7 @@ export const router = createBrowserRouter([
     },
     {
         path: "/receiver",
-        Component: DashboardLayout,
+        Component: withAuth(DashboardLayout, role.RECEIVER as TRole),
         children: [
             {
                 index:true,

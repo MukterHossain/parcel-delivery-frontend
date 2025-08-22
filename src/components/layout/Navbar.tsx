@@ -20,9 +20,13 @@ import { role } from "@/constants/role"
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
-  { href: "/", label: "Home", },
-  { href: "/about", label: "About", },
+  { href: "/", label: "Home", role: "PUBLIC" },
+  { href: "/about", label: "About", role: "PUBLIC" },
+  { href: "/feature", label: "Feature", role: "PUBLIC" },
+  { href: "/contact", label: "Contact", role: "PUBLIC" },
+  { href: "/faq", label: "FAQ", role: "PUBLIC" },
   { href: "/receiver", label: "Dashboard", role: role.RECEIVER},
+  { href: "/sender", label: "Dashboard", role: role.SENDER},
   { href: "/admin", label: "Dashboard", role: role.ADMIN},
   { href: "/admin", label: "Dashboard", role: role.SUPER_ADMIN},
 ]
@@ -104,7 +108,9 @@ export default function Navbar() {
             <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="gap-2">
                 {navigationLinks.map((link, index) => (
-                  <NavigationMenuItem key={index}>
+                  <>
+                  {link.role === "PUBLIC" && (
+                    <NavigationMenuItem key={index}>
                     <NavigationMenuLink
                       asChild
                       href={link.href}
@@ -113,6 +119,19 @@ export default function Navbar() {
                       <Link to={link.href}>{link.label}</Link>
                     </NavigationMenuLink>
                   </NavigationMenuItem>
+                  )}
+                  {link.role === data?.data?.role && (
+                    <NavigationMenuItem key={index}>
+                    <NavigationMenuLink
+                      asChild
+                      href={link.href}
+                      className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+                    >
+                      <Link to={link.href}>{link.label}</Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                  )}
+                  </>
                 ))}
               </NavigationMenuList>
             </NavigationMenu>
