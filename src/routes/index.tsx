@@ -3,6 +3,8 @@ import About from "@/components/modules/about/About";
 import HomePage from "@/pages/HomePage";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
+import Unauthorized from "@/pages/Unauthorized";
+import Verify from "@/pages/Verify";
 import { createBrowserRouter } from "react-router";
 
 
@@ -31,5 +33,13 @@ export const router = createBrowserRouter([
     {
        path: "/register",
        Component: Register
+    },
+     {
+       path: "/verify",
+       Component: Verify
+    },
+    {
+       path: "/unauthorized",
+       Component: Unauthorized
     },
 ])
