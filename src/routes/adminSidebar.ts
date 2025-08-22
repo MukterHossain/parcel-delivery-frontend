@@ -1,7 +1,8 @@
 import Analytics from "@/pages/Admin/Analytics";
 import Profile from "@/pages/Admin/Profile";
+import type { ISideBarItem } from "@/types";
 
-export const adminSidebar = [
+export const adminSidebar: ISideBarItem[] = [
     {
       title: "Dashboard",
       items: [

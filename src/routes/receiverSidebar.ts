@@ -1,13 +1,14 @@
 import ReceiverProfile from "@/pages/Receiver/ReceiverProfile";
 
 
-export const receiverSidebar = [
+
+export const receiverSidebar= [
     {
         title: "History",
         items: [
             {
                 title: "Receiver Profile",
-                url: "/user/profile",
+                url: "/receiver/profile",
                 component: ReceiverProfile
             },
         ],

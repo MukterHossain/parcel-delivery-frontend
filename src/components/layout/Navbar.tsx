@@ -16,14 +16,15 @@ import { ModeToggle } from "./ModeToggle"
 import { authApi, useLogoutMutation, useUserInfoQuery } from "@/redux/feature/auth/auth.api"
 import { useAppDispatch } from "@/redux/hook"
 import { toast } from "sonner"
+import { role } from "@/constants/role"
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
   { href: "/", label: "Home", },
   { href: "/about", label: "About", },
-  // { href: "/tours", label: "Tours", role: "PUBLIC" },
-  { href: "/admin", label: "Dashboard", },
-  // { href: "/admin", label: "Dashboard", role: role.admin },
+  { href: "/receiver", label: "Dashboard", role: role.RECEIVER},
+  { href: "/admin", label: "Dashboard", role: role.ADMIN},
+  { href: "/admin", label: "Dashboard", role: role.SUPER_ADMIN},
 ]
 export default function Navbar() {
 
