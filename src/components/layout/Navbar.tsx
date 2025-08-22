@@ -15,6 +15,7 @@ import { Link } from "react-router"
 import { ModeToggle } from "./ModeToggle"
 import { authApi, useLogoutMutation, useUserInfoQuery } from "@/redux/feature/auth/auth.api"
 import { useAppDispatch } from "@/redux/hook"
+import { toast } from "sonner"
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
@@ -30,11 +31,10 @@ export default function Navbar() {
   const [logout] = useLogoutMutation()
   const dispatch = useAppDispatch()
   console.log(data)
-  console.log(data?.data?.email)
-  console.log(data?.data)
 
   const handleLogout = async () => {
     await logout(undefined)
+    toast.success("Logout successfully")
     dispatch(authApi.util.resetApiState())
   }
   return (
