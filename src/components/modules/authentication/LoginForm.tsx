@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import config from "@/config";
 import { cn } from "@/lib/utils";
 import { useLoginMutation } from "@/redux/feature/auth/auth.api";
 import { useForm, type FieldValues, type SubmitHandler } from "react-hook-form";
@@ -91,7 +92,7 @@ export default function LoginForm({
           </span>
         </div>
         <Button variant="outline" 
-        // onClick={() => window.open(`${config.baseUrl}/auth/google`)} 
+        onClick={() => window.open(`${config.baseUrl}/auth/google`)} 
         className="w-full">
 
           Login with Google
