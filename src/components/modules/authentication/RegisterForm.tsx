@@ -2,20 +2,22 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import {zodResolver} from "@hookform/resolvers/zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import Password from "@/components/ui/Passwor";
 import { useRegisterMutation } from "@/redux/feature/auth/auth.api";
 import { toast } from "sonner";
 import z from "zod";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 
 const registerSchema = z.object({
-  name: z.string().min(3, {error: "Name is too short"}).max(50),
-  email: z.email(),
-  password: z.string().min(8, {error: "Password is too short"}),
-  confirmPassword: z.string().min(8, {error: "Confirm Password is too short"})
+    name: z.string().min(3, { error: "Name is too short" }).max(50),
+    email: z.email(),
+    password: z.string().min(8, { error: "Password is too short" }),
+    confirmPassword: z.string().min(8, { error: "Confirm Password is too short" }),
+    role: z.enum(["SENDER", "RECEIVER", "ADMIN"], {error: "Role is reqired"}),
 
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Password do not match",
@@ -26,43 +28,44 @@ export default function RegisterForm({
     className,
     ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
-const [register] = useRegisterMutation()
-const navigate = useNavigate()
+    const [register] = useRegisterMutation()
+    const navigate = useNavigate()
 
-  const form = useForm<z.infer<typeof registerSchema>>({
-    resolver: zodResolver(registerSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: ""
-    }
-  })
+    const form = useForm<z.infer<typeof registerSchema>>({
+        resolver: zodResolver(registerSchema),
+        defaultValues: {
+            name: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+            role: undefined,
+        }
+    })
 
-  const onSubmit = async(data: z.infer<typeof registerSchema>) => {
+    const onSubmit = async (data: z.infer<typeof registerSchema>) => {
 
-    const userInfo = {
-      name: data.name,
-      email: data.email,
-      password: data.password,
-      role: "SENDER",
-      auths: [{
-        provider: "credential",
-        providerId: data.email
-      }]
+        const userInfo = {
+            name: data.name,
+            email: data.email,
+            password: data.password,
+            role: data.role,
+            auths: [{
+                provider: "credential",
+                providerId: data.email
+            }]
+        }
+        console.log(userInfo)
+        try {
+            const res = await register(userInfo).unwrap()
+            console.log(res)
+            toast.success("User Created Successfully")
+            navigate("/verify")
+        } catch (error) {
+            console.error(error)
+        }
     }
-    console.log(userInfo)
-    try {
-      const res = await register(userInfo).unwrap()
-      console.log(res)
-      toast.success("User Created Successfully")
-      navigate("/verify")
-    } catch (error) {
-      console.error(error)
-    }
-  }
-  return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    return (
+        <div className={cn("flex flex-col gap-6", className)} {...props}>
             <div className="flex flex-col items-center gap-2 text-center">
                 <h1 className="text-2xl font-bold">Login to your account</h1>
                 <p className="text-muted-foreground text-sm text-balance">
@@ -84,7 +87,28 @@ const navigate = useNavigate()
                                     <FormMessage />
                                 </FormItem>
                             )}
-                        /> 
+                        />
+                        <FormField
+                            name="role"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Role</FormLabel>
+                                    <FormControl>
+                                        <Select  value={field.value} onValueChange={field.onChange}>
+                                            <SelectTrigger className="w-full">
+                                                <SelectValue placeholder="Select role" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="SENDER">Sender</SelectItem>
+                                                <SelectItem value="RECEIVER">Receiver</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </FormControl>
+                                    <FormDescription className="sr-only">This is your public display name.</FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                         <FormField
                             name="email"
                             render={({ field }) => (
@@ -97,7 +121,7 @@ const navigate = useNavigate()
                                     <FormMessage />
                                 </FormItem>
                             )}
-                        /> 
+                        />
                         <FormField
                             name="password"
                             render={({ field }) => (
@@ -110,7 +134,7 @@ const navigate = useNavigate()
                                     <FormMessage />
                                 </FormItem>
                             )}
-                        /> 
+                        />
                         <FormField
                             name="confirmPassword"
                             render={({ field }) => (
@@ -123,7 +147,7 @@ const navigate = useNavigate()
                                     <FormMessage />
                                 </FormItem>
                             )}
-                        /> 
+                        />
                         <Button type="submit" className="w-full">
                             Login
                         </Button>
@@ -136,7 +160,7 @@ const navigate = useNavigate()
                     </span>
                 </div>
                 <Button variant="outline" className="w-full">
-                   
+
                     Login with GitHub
                 </Button>
             </div>
@@ -147,5 +171,5 @@ const navigate = useNavigate()
                 </Link>
             </div>
         </div>
-  )
+    )
 }

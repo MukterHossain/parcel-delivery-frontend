@@ -1,12 +1,24 @@
+import AddParcel from "@/pages/Sender/AddParcel";
+import SenderAnalytics from "@/pages/Sender/SenderAnalytics";
 import SenderProfile from "@/pages/Sender/SenderProfile";
 
 
 export const senderSidebar = [
     {
-        title: "History",
+        title: "Sender Dashboard",
         items: [
             {
-                title: "Sender Profile",
+                title: "Analytics",
+                url: "/sender/analytics",
+                component: SenderAnalytics
+            },
+            {
+                title: "Add Parcel",
+                url: "/sender/add-parcel",
+                component: AddParcel
+            },
+            {
+                title: "Profile",
                 url: "/sender/profile",
                 component: SenderProfile
             },

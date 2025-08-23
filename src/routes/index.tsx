@@ -74,7 +74,7 @@ export const router = createBrowserRouter([
         children: [
             {
                 index:true,
-                element: <Navigate to="/sender/profile"></Navigate>
+                element: <Navigate to="/sender/analytics"></Navigate>
             },
             ...generateRoutes(senderSidebar)
         ]
