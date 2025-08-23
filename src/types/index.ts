@@ -1,7 +1,7 @@
 import type { ComponentType } from "react"
 
 export type {ISendOtp, ILogin, IVerifyOtp, } from "@/types/authTypes"
-
+export type {IParcelPackage} from "./parcel.type"
 
 export interface IResponse<T> {
   statusCode: number

@@ -1,34 +1,28 @@
 import { baseApi } from "@/redux/baseApi";
-import type { ILogin } from "@/types";
+import type {  IParcelPackage } from "@/types";
 
 
 export const parcelApi = baseApi.injectEndpoints({
     endpoints: (builder) =>({
-        login: builder.mutation<null, ILogin>({
-            query: (userInfo) =>({
-                url: "/auth/login",
+        addParcel: builder.mutation<null, Partial<IParcelPackage>>({
+            query: (parceInfo) =>({
+                url: "/parcels",
                 method: "POST",
-                data: userInfo,
-            })
-        }),
-        logout: builder.mutation({
-            query: () =>({
-                url: "/auth/logout",
-                method: "POST",
+                data: parceInfo,
             }),
-            invalidatesTags: ["USER"],
+            invalidatesTags: ["PARCEL"],
         }),
         
-        userInfo: builder.query({
+        myParcels: builder.query({
             query: () =>({
-                url: "/user/me",
+                url: "/parcels/me",
                 method: "GET"
             }),
-            providesTags: ["USER"],
+            
         }),
     })
 })
 
 
 
-export const { useLoginMutation,  useUserInfoQuery, useLogoutMutation} = parcelApi
+export const { useAddParcelMutation, useMyParcelsQuery } = parcelApi

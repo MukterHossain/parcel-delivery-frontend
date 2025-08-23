@@ -4,22 +4,73 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { useAddParcelMutation} from "@/redux/feature/parcel/parcel.api";
+import { PARCEL_STATUS } from "@/types/parcel.type";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon} from "lucide-react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import z from "zod";
 
+
+
+const parceSchema = z.object({
+    type: z.string().min(3, { message: "Type is too short" }).max(50),
+    weight: z.number().min(1, { message: "Weight is required" }).max(50),
+    fee: z.number().min(1, { message: "Fee is required" }),
+    pickupAddress: z.string().min(3, { message: "Pickup Address is required" }).max(100),
+    deliveryAddress: z.string().min(3, { message: "Pickup Address is required" }).max(100),
+    deliveryDate: z.date().optional(),
+    description: z.string().optional(),
+    status: z.enum(["REQUESTED", "APPROVED", "DISPATCHED", "IN_TRANSIT","DELIVERED", "CANCELED","BLOCKED", "UNBLOCKED"]),
+    // status: z.nativeEnum(PARCEL_STATUS)
+
+})
+type ParcelFormValues = z.infer<typeof parceSchema>
 
 export default function AddParcel() {
 
+   const [addParcel] = useAddParcelMutation()
+  //  const {data: myParcels} = useMyParcelsQuery(undefined)
+
+  // console.log("data", addParcel)
+  // console.log("myParcels", myParcels)
 
 
-    const form = useForm()
 
-    const handleSubmit = (data) =>{
-        console.log("data", data)
+    const form = useForm<ParcelFormValues>({
+        resolver: zodResolver(parceSchema),
+        defaultValues: {
+            type: "",
+            weight: 1,
+            fee: 1,            
+            pickupAddress: "",
+            deliveryAddress: "",
+            deliveryDate: undefined,
+            description: "",
+            status: "REQUESTED",
+        }
+    })
+
+    const handleSubmit = async(values: ParcelFormValues) =>{
+      // const toastId = toast.loading("Creating parcel....");
+      try {
+        const parcelData = {
+          ...values,
+          deliveryDate: values.deliveryDate ? new Date(values.deliveryDate).toISOString() : undefined
+        }
+        const res = await addParcel(parcelData).unwrap()
+        console.log(res)
+        toast.success("Parcel created successfully")
+      } catch (err) {
+        console.error(err)
+        toast.error("Failed to create parcel")
+      }
+        
     }
 
   return (
@@ -57,7 +108,7 @@ export default function AddParcel() {
                     <FormItem className="flex-1">
                       <FormLabel>Weight(kg)</FormLabel>
                       <FormControl>
-                        <Input type="number" {...field} />
+                        <Input type="number"  value={field.value} onChange={(e) => field.onChange(parseFloat(e.target.value))}  />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -70,7 +121,7 @@ export default function AddParcel() {
                     <FormItem className="flex-1">
                       <FormLabel>Fee</FormLabel>
                       <FormControl>
-                        <Input type="number" {...field} />
+                        <Input type="number" value={field.value} onChange={(e) => field.onChange(parseFloat(e.target.value))}  />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -105,32 +156,6 @@ export default function AddParcel() {
                   )}
                 />
               </div>
-              <div className="flex gap-5">
-                <FormField control={form.control} name="status" render={({ field }) => (
-                  <FormItem className="flex-1 ">
-                    <FormLabel>Status</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value} 
-                    >
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select status" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {/* {Object.values(PARCEL_STATUS).map(
-                          (status: { label: string; value: string }) => (
-                            <SelectItem key={status} value={status}>
-                              {status.label}
-                            </SelectItem>
-                          )
-                        )} */}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-                />
-              </div>
               
               <div className="flex gap-5">
                 <FormField
@@ -161,7 +186,7 @@ export default function AddParcel() {
                         <PopoverContent className="w-auto p-0" align="start">
                           <Calendar
                             mode="single"
-                            selected={new Date(field.value)}
+                            selected={(field.value ? new Date(field.value): undefined)}
                             onSelect={field.onChange}
                             disabled={(date) =>
                               date <
@@ -200,7 +225,7 @@ export default function AddParcel() {
         </CardContent>
         <CardFooter className="flex justify-end">
           <Button type="submit" form="add-parcel">
-            Create Tour
+            Create Parcel
           </Button>
         </CardFooter>
       </Card>
