@@ -13,16 +13,21 @@ export const parcelApi = baseApi.injectEndpoints({
             invalidatesTags: ["PARCEL"],
         }),
         
+        allReceivers: builder.query({
+            query: () =>({
+                url: "/user/receivers",
+                method: "GET"
+            }),            
+        }),
         myParcels: builder.query({
             query: () =>({
                 url: "/parcels/me",
                 method: "GET"
-            }),
-            
+            }),            
         }),
     })
 })
 
 
 
-export const { useAddParcelMutation, useMyParcelsQuery } = parcelApi
+export const { useAddParcelMutation, useMyParcelsQuery, useAllReceiversQuery } = parcelApi

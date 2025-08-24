@@ -4,11 +4,11 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { useAddParcelMutation} from "@/redux/feature/parcel/parcel.api";
-import { PARCEL_STATUS } from "@/types/parcel.type";
+import { useUserInfoQuery } from "@/redux/feature/auth/auth.api";
+import { useAddParcelMutation, useAllReceiversQuery} from "@/redux/feature/parcel/parcel.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon} from "lucide-react";
@@ -19,56 +19,65 @@ import z from "zod";
 
 
 const parceSchema = z.object({
-    type: z.string().min(3, { message: "Type is too short" }).max(50),
-    weight: z.number().min(1, { message: "Weight is required" }).max(50),
-    fee: z.number().min(1, { message: "Fee is required" }),
+    type: z.string().min(3, { message: "Parcel type is too short" }).max(50),
+    weight: z.number().min(0, { message: "Weight is required" }).max(50),
+    fee: z.number().min(0, { message: "Fee is required" }),
     pickupAddress: z.string().min(3, { message: "Pickup Address is required" }).max(100),
-    deliveryAddress: z.string().min(3, { message: "Pickup Address is required" }).max(100),
+    deliveryAddress: z.string().min(3, { message: "Delivery Address is required" }).max(100),
     deliveryDate: z.date().optional(),
     description: z.string().optional(),
+    receiverId: z.string().min(3, { message: "Receiver is required" }).max(100),
     status: z.enum(["REQUESTED", "APPROVED", "DISPATCHED", "IN_TRANSIT","DELIVERED", "CANCELED","BLOCKED", "UNBLOCKED"]),
-    // status: z.nativeEnum(PARCEL_STATUS)
 
 })
 type ParcelFormValues = z.infer<typeof parceSchema>
 
 export default function AddParcel() {
-
+const {data: getSender} = useUserInfoQuery(undefined)
    const [addParcel] = useAddParcelMutation()
-  //  const {data: myParcels} = useMyParcelsQuery(undefined)
-
-  // console.log("data", addParcel)
-  // console.log("myParcels", myParcels)
+  const { data: receivers } = useAllReceiversQuery(undefined)
+  // console.log("receivers", receivers)
 
 
+  const receiversOptions = receivers?.data?.map((receiver: { _id: string; name: string }) => ({
+    value: receiver._id,
+    label: receiver.name
+  })
+  )
+  const senderId = getSender?.data?._id;
 
     const form = useForm<ParcelFormValues>({
         resolver: zodResolver(parceSchema),
         defaultValues: {
             type: "",
-            weight: 1,
-            fee: 1,            
+            weight: 0,
+            fee: 0,            
             pickupAddress: "",
             deliveryAddress: "",
             deliveryDate: undefined,
             description: "",
+            receiverId: "",
             status: "REQUESTED",
         }
     })
 
     const handleSubmit = async(values: ParcelFormValues) =>{
-      // const toastId = toast.loading("Creating parcel....");
+      const toastId = toast.loading("Creating parcel....");
       try {
         const parcelData = {
           ...values,
+          sender: senderId,
+          receiver: values.receiverId,
           deliveryDate: values.deliveryDate ? new Date(values.deliveryDate).toISOString() : undefined
         }
+        console.log("parcelData", parcelData)
         const res = await addParcel(parcelData).unwrap()
         console.log(res)
-        toast.success("Parcel created successfully")
+        toast.success("Parcel created successfully", {id: toastId})
+        form.reset();
       } catch (err) {
         console.error(err)
-        toast.error("Failed to create parcel")
+        toast.error("Failed to create parcel", {id: toastId})
       }
         
     }
@@ -158,6 +167,34 @@ export default function AddParcel() {
               </div>
               
               <div className="flex gap-5">
+                
+                 <FormField
+                  control={form.control}
+                  name="receiverId" render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Receiver</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {receiversOptions?.map(
+                            (option: { value: string; label: string }) => (
+                              <SelectItem key={option.value} value={option.value}
+                              >
+                                {option.label}
+                              </SelectItem>
+                            )
+                          )}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="deliveryDate"
