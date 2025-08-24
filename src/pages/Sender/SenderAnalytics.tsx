@@ -1,9 +1,15 @@
 
 
 export default function SenderAnalytics() {
+
+  
+
   return (
-    <div>
-      <h1>SenderAnalytics</h1>
+    <div className="w-full max-w-7xl mx-auto px-5">
+      <div className="flex justify-between my-8">
+        <h1 className="text-xl font-semibold">Sender Analytics</h1>
+      </div>
+     
     </div>
   )
 }
