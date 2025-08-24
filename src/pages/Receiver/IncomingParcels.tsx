@@ -16,7 +16,7 @@ export default function IncomingParcels() {
   return (
     <div className="w-full max-w-7xl mx-auto px-5">
       <div className="flex justify-between my-8">
-        <h1 className="text-xl font-semibold">All Parcels</h1>
+        <h1 className="text-xl font-semibold">Incoming Parcels</h1>
       </div>
       <div className="border border-muted rounded-md">
         <Table>
