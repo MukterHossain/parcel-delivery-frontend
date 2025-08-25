@@ -28,10 +28,17 @@ export const adminApi = baseApi.injectEndpoints({
             }),
             providesTags: ["PARCEL"],
         }),
+        adminAnalytics: builder.query({
+            query: () =>({
+                url: `/parcels/analytics`,
+                method: "GET",
+            }),
+            providesTags: ["PARCEL"],
+        }),
         
     })
 })
 
 
 
-export const {  useAllParcelsQuery, useStatusUpdateMutation,useStatusBlockMutation } = adminApi
+export const {  useAllParcelsQuery, useStatusUpdateMutation,useStatusBlockMutation , useAdminAnalyticsQuery} = adminApi
