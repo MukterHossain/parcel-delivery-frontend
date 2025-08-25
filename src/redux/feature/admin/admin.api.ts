@@ -20,7 +20,7 @@ export const adminApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ["PARCEL"],
         }),
-        allParcels: builder.query({
+         allParcels: builder.query({
             query: ({page =1, limit = 10, status, searchTerm, sort }: {page?: number, limit?: number, status?: string, searchTerm?: string, sort?: string}) =>({
                 url: `/parcels`,
                 method: "GET",
@@ -35,10 +35,36 @@ export const adminApi = baseApi.injectEndpoints({
             }),
             providesTags: ["PARCEL"],
         }),
+
+        // User
+        userBlock: builder.mutation({
+            query: ({id, userInfo}) =>({
+                url: `/user/block/${id}`,
+                method: "PATCH",
+                data:{ userInfo},
+            }),
+            invalidatesTags: ["PARCEL"],
+        }),
+        userUnblock: builder.mutation({
+            query: ({id, userInfo}) =>({
+                url: `/user/unblock/${id}`,
+                method: "PATCH",
+                data:{ userInfo},
+            }),
+            invalidatesTags: ["PARCEL"],
+        }),
+        allUsers: builder.query({
+            query: () =>({
+                url: `/user/all-users`,
+                method: "GET",
+            }),
+            providesTags: ["USER"],
+        }),
+       
         
     })
 })
 
 
 
-export const {  useAllParcelsQuery, useStatusUpdateMutation,useStatusBlockMutation , useAdminAnalyticsQuery} = adminApi
+export const {  useAllParcelsQuery, useStatusUpdateMutation,useStatusBlockMutation, useAllUsersQuery , useAdminAnalyticsQuery, useUserBlockMutation, useUserUnblockMutation} = adminApi

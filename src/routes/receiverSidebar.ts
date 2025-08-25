@@ -6,7 +6,7 @@ import ReceiverProfile from "@/pages/Receiver/ReceiverProfile";
 
 export const receiverSidebar= [
     {
-        title: "Receiver Dashboard",
+        title: "🏠 Receiver Dashboard",
         items: [
             {
                 title: "Incoming Parcels",

@@ -6,7 +6,7 @@ import SenderProfile from "@/pages/Sender/SenderProfile";
 
 export const senderSidebar = [
     {
-        title: "Sender Dashboard",
+        title: "🏠 Sender Dashboard",
         items: [
             {
                 title: "Analytics",
