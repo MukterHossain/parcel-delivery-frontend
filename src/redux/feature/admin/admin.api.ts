@@ -21,10 +21,12 @@ export const adminApi = baseApi.injectEndpoints({
             invalidatesTags: ["PARCEL"],
         }),
         allParcels: builder.query({
-            query: () =>({
+            query: ({page =1, limit = 10, status, searchTerm, sort }: {page?: number, limit?: number, status?: string, searchTerm?: string, sort?: string}) =>({
                 url: `/parcels`,
                 method: "GET",
+                params: {page, limit, status, searchTerm, sort},
             }),
+            providesTags: ["PARCEL"],
         }),
         
     })
