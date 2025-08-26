@@ -43,7 +43,7 @@ export const adminApi = baseApi.injectEndpoints({
                 method: "PATCH",
                 data:{ userInfo},
             }),
-            invalidatesTags: ["PARCEL"],
+            invalidatesTags: ["USER"],
         }),
         userUnblock: builder.mutation({
             query: ({id, userInfo}) =>({
@@ -51,7 +51,7 @@ export const adminApi = baseApi.injectEndpoints({
                 method: "PATCH",
                 data:{ userInfo},
             }),
-            invalidatesTags: ["PARCEL"],
+            invalidatesTags: ["USER"],
         }),
         allUsers: builder.query({
             query: () =>({

@@ -1,17 +1,60 @@
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { useAllUsersQuery } from "@/redux/feature/admin/admin.api"
+import { useAllUsersQuery, useUserBlockMutation, useUserUnblockMutation } from "@/redux/feature/admin/admin.api"
 import type { IUser } from "@/types"
 import { Loader2Icon } from "lucide-react"
+import { toast } from "sonner"
 
 
 export default function AllUsers() {
     const {data: allUsers, isLoading} = useAllUsersQuery(undefined)
+    const [userBlock] = useUserBlockMutation()
+    const [userUnblock] = useUserUnblockMutation()
     console.log("allUsers", allUsers) 
 
     const Users = allUsers?.data || []
     console.log("Users", Users)
 
+
+
+    const handleBlock = async(id:string) =>{
+      console.log("id", id)
+      const toastId = toast.loading("User blocking....")
+ 
+    try {
+      const res = await userBlock({id, isActive: "BLOCKED"}).unwrap()
+      console.log("res", res)
+      if (res.success) {
+        toast.success("User blocked", { id: toastId })
+      }
+    } catch (err) {
+      console.error(err)
+      toast.error("Something went wrong", { id: toastId })
+    }
+    }
+    const handleUnblock = async (id:string) =>{
+      console.log("id", id)
+      const toastId = toast.loading("User unblocking....")
+ 
+    try {
+      const res = await userUnblock({id, isActive: "UNBLOCKED"}).unwrap()
+      console.log("res", res)
+      if (res.success) {
+        toast.success("User unblocked", { id: toastId })
+      }
+    } catch (err) {
+      console.error(err)
+      toast.error("Something went wrong", { id: toastId })
+    }
+
+    }
+
+    const roleColors: Record<string, string>
+={
+  ADMIN : "text-pink-500",
+  SENDER : "text-green-500",
+  RECEIVER : "text-blue-500"
+}
     if(isLoading) return <h1>Loading...</h1>
       return (
     <div>
@@ -33,13 +76,13 @@ export default function AllUsers() {
                 {
                   Users?.map((item: IUser) => (
                     <TableRow key={item._id}>
-                      <TableCell className="font-medium ">{item?.name}</TableCell>
+                      <TableCell className="font-medium ">{item?.name.toUpperCase()}</TableCell>
                       <TableCell className="font-medium ">{item?.email}</TableCell>
-                      <TableCell className="font-medium">{item?.role}</TableCell>
-                      <TableCell className="font-medium"> {item?.isActive}</TableCell>
+                      <TableCell className={`font-medium ${roleColors[item?.role] || "text-gray-500"}`}>{item?.role.charAt(0).toUpperCase() + item?.role.slice(1).toLowerCase()}</TableCell>
+                      <TableCell className={`font-medium ${item?.isActive === "ACTIVE" ? "text-green-500" : "text-red-500"}`}> {item?.isActive.charAt(0).toUpperCase() + item?.isActive.slice(1).toLowerCase()}</TableCell>
                       <TableCell className="font-medium"> 
                         {
-                            item?.isActive === "ACTIVE" ? <Button>Block</Button>: <Button>Unblock</Button>
+                            item?.isActive === "ACTIVE" ? <Button onClick={() => handleBlock(item._id)}>Block</Button>: <Button onClick={() => handleUnblock(item._id)}>Unblock</Button>
                         }
                       </TableCell>
                     </TableRow>
