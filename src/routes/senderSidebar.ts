@@ -10,7 +10,7 @@ export const senderSidebar = [
         items: [
             {
                 title: "Analytics",
-                url: "/sender/analytics",
+                url: "/sender/analytic",
                 component: SenderAnalytics
             },
             {

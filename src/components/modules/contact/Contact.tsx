@@ -40,28 +40,27 @@ export default function Contact() {
 
   return (
     <div className="py-16">
-      <div className="max-w-3xl mx-auto px-5">
+      <div className="max-w-3xl mx-auto px-5 text-muted-foreground">
         <h1 className="text-3xl font-bold">Contact Us</h1>
         <p>Have a question or went a delivery quote? Fill out the form and we'll reach out.</p>
-        <form onSubmit={handleSubmit} className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 rounded-2xl p-5 shadow-sm bg-white">
+        <form onSubmit={handleSubmit} className="mt-6 text-muted  grid grid-cols-1 md:grid-cols-2 gap-4 bg-card-foreground rounded-2xl p-5 shadow-md ">
           <div className="flex flex-col gap-1">
-            <label className="text-sm text-gray-600">Your Name</label>
-            <input type="text" required name="name" value={form.name} onChange={handleChange} className="px-3 py-2 rounded-xl border outline-none focus:ring-2 focus:ring-blue-500" placeholder="Your Name" />
+            <label className="text-sm ">Your Name</label>
+            <input type="text" required name="name" value={form.name} onChange={handleChange} className="px-3 py-2 border-accent  rounded-xl border outline-none focus:ring-2 focus:ring-blue-500" placeholder="Your Name" />
           </div>
           <div className="flex flex-col gap-1 ">
-            <label className="text-sm text-gray-600">Your Email</label>
-            <input type="text" required name="email" value={form.email} onChange={handleChange} className="px-3 py-2 rounded-xl border outline-none focus:ring-2 focus:ring-blue-500" placeholder="Your Eamil" />
+            <label className="text-sm ">Your Email</label>
+            <input type="text" required name="email" value={form.email} onChange={handleChange} className="px-3 py-2 border-accent rounded-xl border outline-none focus:ring-2 focus:ring-blue-500" placeholder="Your Eamil" />
           </div>
           <div className="flex flex-col gap-1 md:col-span-2">
-            <label className="text-sm text-gray-600">Your Phone</label>
-            <input  name="phone" value={form.phone} onChange={handleChange} className="px-3 py-2 rounded-xl border outline-none focus:ring-2 focus:ring-blue-500" placeholder="01XXXXXXXXX" />
+            <label className="text-sm ">Your Phone</label>
+            <input  name="phone" value={form.phone} onChange={handleChange} className="px-3 py-2 rounded-xl border border-accent outline-none focus:ring-2 focus:ring-blue-500" placeholder="01XXXXXXXXX" />
           </div>
           <div className="flex flex-col gap-1 md:col-span-2">
-            <label className="text-sm text-gray-600">Message</label>
-            <textarea required rows={5} name="message" value={form.message} onChange={handleChange} className="px-3 py-2 rounded-xl border outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tell us about your delivery..." />
+            <label className="text-sm ">Message</label>
+            <textarea required rows={5} name="message" value={form.message} onChange={handleChange} className="px-3 py-2 border-accent rounded-xl border outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tell us about your delivery..." />
           </div>
-          <div className="flex items-center justify-between md:col-span-2">
-            <p className="text-sm text-gray-600">Simulated submission - no backend required</p>
+          <div className="flex items-center justify-end md:col-span-2">
             <Button disabled={loading} type="submit" className="px-5 py-5 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 transition disabled:opacity-60">{loading ? "Sending...": "Submit"} </Button>
           </div>
         </form>

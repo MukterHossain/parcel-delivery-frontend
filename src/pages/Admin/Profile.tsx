@@ -11,7 +11,7 @@ export default function Profile() {
   if(isLoading) return <div>Loading...</div>
   return (
     <div>
-      <div className="max-w-lg mx-auto block  border border-gray-300 sm:p-6 mt-4 sm:mt-0 shadow p-5 bg-linear-to-r/srgb from-indigo-200 to-teal-300 hover:bg-linear-to-r/srgb hover:from-teal-300 hover:to-indigo-200 rounded-xl duration-800 ease-in-out">
+      <div className="max-w-lg mx-auto block text-gray-800  border border-gray-300 sm:p-6 mt-4 sm:mt-0 shadow p-5 bg-linear-to-r/srgb from-indigo-200 to-teal-300 hover:bg-linear-to-r/srgb hover:from-teal-300 hover:to-indigo-200 rounded-xl duration-800 ease-in-out">
         <div className="flex flex-col sm:gap-4 lg:gap-6">
           <div className="flex justify-center  sm:shrink-0">
             <img

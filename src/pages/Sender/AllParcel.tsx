@@ -6,11 +6,12 @@ import type { IParcelPackage } from "@/types";
 import {  X } from "lucide-react";
 import { toast } from "sonner";
 import { StatusLog } from "./StatusLog";
+import { Link } from "react-router";
 
 
 export default function AllParcel() {
 
-  const {data:senderData } = useGetSenderParcelsQuery(undefined)
+  const {data:senderData , isLoading, error} = useGetSenderParcelsQuery(undefined)
   const [cancelParcel] = useCancelParcelMutation()
   console.log("senderData", senderData)
 
@@ -39,6 +40,9 @@ export default function AllParcel() {
     BLOCKED: "text-red-500",
     UNBLOCKED: "text-green-500",
  }
+ 
+    if(isLoading) return <div>Loading...</div>
+    if(error) return <div>Failed to load parcel tracking</div>
 
   return (
     <div className="w-full max-w-7xl mx-auto px-5">
@@ -64,6 +68,9 @@ export default function AllParcel() {
 
                   <TableCell className={statusColors[item?.status] || "text-gray-500"}>{item?.status.toLowerCase()} </TableCell>
 
+                  <TableCell className="font-medium">
+                    <Link to={`/sender/parcel-tracking/${item.trackingId}`} className="bg-blue-500 rounded-sm px-2 py-1 text-white hover:bg-blue-200 hover:text-blue-800 duration-300">Tracking</Link>
+                  </TableCell>
                   <TableCell className="font-medium">
                     <StatusLog id={item?._id}>
                         <Button size={"sm"}>Staus Log</Button>

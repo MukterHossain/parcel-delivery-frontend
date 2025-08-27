@@ -43,7 +43,7 @@ const chartConfig = {
 }
 
   return (
-    <div className="sm:w-2/3 md:1/2 mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="sm:w-2/3 md:1/2 text-muted mx-auto px-4 sm:px-6 lg:px-8">
       <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
         <div className="mt-4 sm:mt-0 shadow p-5 bg-linear-to-r/srgb from-indigo-200 to-teal-300 hover:bg-linear-to-r/srgb hover:from-teal-300 hover:to-indigo-200 rounded-xl duration-500 ease-in-out">
             <h3 className="text-md font-medium text-pretty text-gray-900 flex flex-col items-center">

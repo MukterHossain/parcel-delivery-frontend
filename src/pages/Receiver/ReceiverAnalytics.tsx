@@ -1,11 +1,12 @@
 import { Card, CardContent,  CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { useSenderAnalyticsQuery } from "@/redux/feature/parcel/parcel.api";
+
+import { useReceiverAnalyticsQuery } from "@/redux/feature/receiver/receiver.api";
 import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-export default function SenderAnalytics() {
-  const {data: anylyticData, isLoading} = useSenderAnalyticsQuery(undefined)
+export default function ReceiverAnalytics() {
+  const {data: anylyticData, isLoading} = useReceiverAnalyticsQuery(undefined)
   console.log("anylyticsData", anylyticData)
 
   if(isLoading) return <div>Loading...</div>
@@ -27,30 +28,30 @@ const chartConfig = {
   
 
   return (
-    <div className="sm:w-2/3 md:1/2 text-muted mx-auto px-4 sm:px-6 lg:px-8">
+    <div className=" md:1/2 text-muted mx-auto px-4 sm:px-6 lg:px-8">
       <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
         <div className="mt-4 sm:mt-0 shadow p-5 bg-linear-to-r/srgb from-indigo-200 to-teal-300 hover:bg-linear-to-r/srgb hover:from-teal-300 hover:to-indigo-200 rounded-xl duration-500 ease-in-out">
             <h3 className="text-md font-medium text-pretty text-gray-900 flex flex-col items-center">
-              <span className="font-bold text-2xl sm:text-4xl">{data?.totalPacelSent}</span>
-              <span>Total Pacel Sent</span> 
+              <span className="font-bold text-2xl sm:text-4xl">{data?.totalPacelReceived ? data?.totalPacelReceived : 0}</span>
+              <span>Total Pacel Received</span> 
             </h3>             
           </div>
         <div className="mt-4 sm:mt-0 shadow p-5 bg-linear-to-r/srgb from-indigo-200 to-teal-300 hover:bg-linear-to-r/srgb hover:from-teal-300 hover:to-indigo-200 rounded-xl duration-500 ease-in-out">
             <h3 className="text-md font-medium text-pretty text-gray-900 flex flex-col items-center">
-              <span className="font-bold text-2xl sm:text-4xl">{data?.deliveredParcels}</span>
+              <span className="font-bold text-2xl sm:text-4xl">{data?.deliveredParcels ? data?.deliveredParcels : 0}</span>
               <span>Delivered Parcels</span> 
             </h3>           
           </div>
         <div className="mt-4 sm:mt-0 shadow p-5 bg-linear-to-r/srgb from-indigo-200 to-teal-300 hover:bg-linear-to-r/srgb hover:from-teal-300 hover:to-indigo-200 rounded-xl duration-500 ease-in-out">
             
             <h3 className="text-md font-medium text-pretty text-gray-900 flex flex-col items-center">
-              <span className="font-bold text-2xl sm:text-4xl">{data?.intransitParcels}</span>
+              <span className="font-bold text-2xl sm:text-4xl">{data?.intransitParcels ? data?.intransitParcels : 0}</span>
               <span>In Iransit Parcels</span> 
             </h3>            
           </div>
         <div className="mt-4 sm:mt-0 shadow p-5 bg-linear-to-r/srgb from-indigo-200 to-teal-300 hover:bg-linear-to-r/srgb hover:from-teal-300 hover:to-indigo-200 rounded-xl duration-500 ease-in-out">
             <h3 className="text-md font-medium text-pretty text-gray-900 flex flex-col items-center">
-              <span className="font-bold text-2xl sm:text-4xl">{data?.canceledParcel}</span>
+              <span className="font-bold text-2xl sm:text-4xl">{data?.canceledParcel ? data?.canceledParcel : 0}</span>
               <span>Canceled Parcel</span> 
             </h3>             
           </div>
@@ -59,7 +60,6 @@ const chartConfig = {
             <Card>
       <CardHeader>
         <CardTitle>May Parcel History</CardTitle>
-        {/* <CardDescription></CardDescription> */}
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>

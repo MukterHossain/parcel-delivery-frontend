@@ -20,8 +20,8 @@ import z from "zod";
 
 const parceSchema = z.object({
     type: z.string().min(3, { message: "Parcel type is too short" }).max(50),
-    weight: z.number().min(0, { message: "Weight is required" }).max(50),
-    fee: z.number().min(0, { message: "Fee is required" }),
+    weight: z.number().min(0, { message: "Weight is required and should be greater than 0" }).max(50),
+    fee: z.number().min(0, { message: "Fee is required and should be greater than 0" }),
     pickupAddress: z.string().min(3, { message: "Pickup Address is required" }).max(100),
     deliveryAddress: z.string().min(3, { message: "Delivery Address is required" }).max(100),
     deliveryDate: z.date().optional(),

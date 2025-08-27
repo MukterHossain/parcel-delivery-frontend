@@ -34,6 +34,8 @@ export const parcelApi = baseApi.injectEndpoints({
                 method: "GET",
             }),
         }),
+       
+
         allReceivers: builder.query({
             query: () =>({
                 url: "/user/receivers",
@@ -47,9 +49,24 @@ export const parcelApi = baseApi.injectEndpoints({
             }),  
              providesTags: ["PARCEL"],          
         }),
+        // For Sender 
+         senderParcelTracking: builder.query({
+            query: (trackingId:string) =>({
+                url: `/parcels/track/${trackingId}`,
+                method: "GET",
+            }),
+            providesTags: ["PARCEL"],
+        }),
+          senderAnalytics: builder.query({
+            query: () =>({
+                url: `/parcels/analytic`,
+                method: "GET",
+            }),
+            providesTags: ["PARCEL"],
+        }),
     })
 })
 
 
 
-export const { useAddParcelMutation, useStatusLogsQuery, useCancelParcelMutation, useGetSenderParcelsQuery, useAllReceiversQuery, useStatusUpdateMutation } = parcelApi
+export const { useAddParcelMutation, useStatusLogsQuery, useCancelParcelMutation, useGetSenderParcelsQuery, useAllReceiversQuery, useStatusUpdateMutation, useSenderParcelTrackingQuery, useSenderAnalyticsQuery } = parcelApi

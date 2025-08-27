@@ -18,6 +18,13 @@ export const receiverApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ["PARCEL"],
         }),
+         receiverAnalytics: builder.query({
+            query: () =>({
+                url: `/parcels/Analytic`,
+                method: "GET",
+            }),
+            providesTags: ["PARCEL"],
+        }),
         deliveryHistory: builder.query({
             query: () =>({
                 url: `/parcels/delivery-history`,
@@ -30,10 +37,11 @@ export const receiverApi = baseApi.injectEndpoints({
                 method: "GET",
             }),
         }),
+
         
     })
 })
 
 
 
-export const { useConfirmDeliveryMutation,useDeliveryHistoryQuery,useIncomingParcelQuery } = receiverApi
+export const { useConfirmDeliveryMutation,useDeliveryHistoryQuery,useIncomingParcelQuery, useReceiverAnalyticsQuery } = receiverApi

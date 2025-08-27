@@ -75,12 +75,12 @@ export default function AllParcels() {
  <h1 className="text-xl font-semibold">Delivery History</h1>
       <div className="flex flex-col sm:flex-row my-8 items-center gap-8">
        
-        <div className="border w-full sm:w-1/2 rounded-sm   py-1">
+        <div className="border w-full border-accent-foreground sm:w-1/2 rounded-sm   py-1">
           <input className="w-full px-2 outline-none" type="text" placeholder="Search by Type, trackId, delevery or pickup address ...." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
         </div>
-        <div className="w-full sm:w-1/2 flex  items-center gap-5">
-          <div className="border w-full  rounded-sm   py-1">
-          <select className="w-full px-2 outline-none" value={status} onChange={(e) => setStatus(e.target.value)}>
+        <div className="w-full sm:w-1/2 flex items-center gap-5">
+          <div className="border w-full border-accent-foreground  rounded-sm   py-1">
+          <select className="w-full px-2 text-muted-foreground bg-muted outline-none" value={status} onChange={(e) => setStatus(e.target.value)}>
             <option value="">All</option>
             <option value="REQUESTED">REQUESTED</option>
             <option value="IN_TRANSIT">IN_TRANSIT</option>
@@ -90,7 +90,7 @@ export default function AllParcels() {
             <option value="UNBLOCKED">UNBLOCKED</option>
           </select>
         </div>
-        <div className="border  rounded-sm px-2  py-1">
+        <div className="border border-accent-foreground  rounded-sm px-2  py-1">
           <button className={`${sortOrder === "asc" ? "text-green-500" : "text-blue-500"}`} onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}>
             {sortOrder === "asc" ? "Descending" : "Ascending"}
           </button>

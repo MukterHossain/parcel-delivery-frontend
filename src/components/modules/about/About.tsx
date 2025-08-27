@@ -11,10 +11,10 @@ export default function About() {
   ]
   return (
     <div className="py-13">
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="max-w-6xl text-muted-foreground mx-auto px-4">
           <h1 className="text-2xl font-bold">About Us</h1>
           <p>We are on a mission to make parcel delivery in Bangladesh simpler, faster, and more transparent. Our service combines reliable logistics with delightful user experience - from booking to doorstep.</p>
-          <div className="mt-10 grid md:grid-cols-3 gap-5">
+          <div className="mt-10 grid md:grid-cols-3  gap-5">
             {team.map((t, i) =>(
               <div key={i} className="rounded-2xl border p-5 shadow-sm bg-white">
                 <div className="w-12 h-12 rounded-full grid place-items-center boreder mb-3">

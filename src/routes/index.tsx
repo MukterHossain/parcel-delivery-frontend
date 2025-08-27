@@ -16,8 +16,9 @@ import { role } from "@/constants/role";
 import type { TRole } from "@/types";
 import Feature from "@/components/modules/feature/Feature";
 import Contact from "@/components/modules/contact/Contact";
-import Faq from "@/components/modules/faq/Faq";
 import ParcelTracking from "@/pages/Admin/ParcelTracking";
+import Faq from "@/components/modules/faq/Faq";
+import SenderParcelTracking from "@/pages/Sender/SenderParcelTraking";
 
 
 export const router = createBrowserRouter([
@@ -81,7 +82,11 @@ export const router = createBrowserRouter([
                 index:true,
                 element: <Navigate to="/sender/analytics"></Navigate>
             },
-            ...generateRoutes(senderSidebar)
+            ...generateRoutes(senderSidebar),
+            {
+                path: "/sender/parcel-tracking/:trackingId",
+                Component: SenderParcelTracking
+            }
         ]
     },
 

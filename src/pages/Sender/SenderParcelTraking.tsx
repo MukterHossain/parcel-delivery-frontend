@@ -1,10 +1,11 @@
-import { useParcelTrackingQuery } from "@/redux/feature/admin/admin.api"
+
+import { useSenderParcelTrackingQuery } from "@/redux/feature/parcel/parcel.api"
 import { useParams } from "react-router"
 
 
-export default function ParcelTracking() {
+export default function SenderParcelTracking() {
     const {trackingId} = useParams<{trackingId: string}>()
-    const {data: parcelTracking, isLoading, error} = useParcelTrackingQuery(trackingId!, {skip: !trackingId})
+    const {data: parcelTracking, isLoading, error} = useSenderParcelTrackingQuery(trackingId!, {skip: !trackingId})
 console.log("trackingId", trackingId)
 
 
@@ -29,7 +30,7 @@ console.log("trackingId", trackingId)
             
             <p className="text-gray-700"> <span className="font-semibold">Pickup Address: </span>{trackginData?.pickupAddress} </p>
             <p className="text-gray-700"> <span className="font-semibold">Delivery Address: </span>{trackginData?.deliveryAddress} </p>
-            <p className="text-gray-700"> <span className="font-semibold">Fee Tk: </span>{trackginData?.fee ? trackginData?.fee : "00"} </p>
+            <p className="text-gray-700"> <span className="font-semibold">Fee Tk: </span>{trackginData?.fee} </p>
            
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
