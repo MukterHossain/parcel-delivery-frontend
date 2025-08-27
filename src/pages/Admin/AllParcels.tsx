@@ -58,14 +58,14 @@ export default function AllParcels() {
 
      const statusColors: Record<string, string>
 ={
-  REQUESTED: "text-blue-500",
-    APPROVED: "text-green-500",
-    DISPATCHED: "text-cyan-500",
-    IN_TRANSIT: "text-lime-500",
-    DELIVERED: "text-green-500",
-    CANCELED: "text-red-500",
-    BLOCKED: "text-shadow-amber-500",
-    UNBLOCKED: "text-green-500",
+  REQUESTED: "text-blue-500 hover:bg-blue-300 duration-300 rounded-sm px-2 py-1 bg-gray-200 hover:text-blue-800",
+    APPROVED: "text-green-500 hover:bg-blue-300 duration-300 rounded-sm px-2 py-1 bg-gray-200 hover:text-green-800",
+    DISPATCHED: "text-cyan-500 hover:bg-blue-300 duration-300 rounded-sm px-2 py-1 bg-gray-200 hover:text-cyan-800",
+    IN_TRANSIT: "text-lime-500 hover:bg-blue-300 duration-300 rounded-sm px-2 py-1 bg-gray-300 hover:text-lime-800",
+    DELIVERED: "text-green-500 hover:bg-blue-300 duration-300 rounded-sm px-2 py-1 bg-gray-200 hover:text-green-800",
+    CANCELED: "text-red-500 hover:bg-blue-300 duration-300 rounded-sm px-2 py-1 bg-gray-200 hover:text-red-800",
+    BLOCKED: "text-shadow-amber-500 hover:bg-blue-300 duration-300 rounded-sm px-2 py-1 bg-gray-200 hover:text-shadow-amber-800",
+    UNBLOCKED: "text-green-500 hover:bg-blue-300 duration-300 rounded-sm px-2 py-1 bg-gray-200 hover:text-green-800",
 }
 
 
@@ -116,14 +116,14 @@ export default function AllParcels() {
                       <TableCell className="font-medium ">{item?.deliveryAddress}</TableCell>
                       <TableCell className="font-medium">{item?.pickupAddress}</TableCell>
                       <TableCell className="font-medium">{item?.trackingId}</TableCell>
-                      <TableCell className="font-medium">
-                        <Link to={`/admin/parcel-tracking/${item.trackingId}`}>Tracking</Link>
+                      <TableCell className="font-medium ">
+                        <Link to={`/admin/parcel-tracking/${item.trackingId}`} className="bg-blue-500 rounded-sm px-2 py-1 text-white hover:bg-blue-200 hover:text-blue-800 duration-300">Tracking</Link>
                       </TableCell>
                       <TableCell className="font-medium">
                        <select className={`${statusColors[item?.status] || "text-gray-500"}`}  defaultValue={item?.status} onChange={(e) => handleStatusChange(item._id,e.target.value)}>
-            <option  value={item?.status}>{item?.status.toLowerCase()}</option>
+            <option   value={item?.status}>{item?.status.toLowerCase()}</option>
             {transitionStatus[item?.status]?.map(status => (
-              <option key={status} value={status}>{status.toLowerCase()}</option>
+              <option  key={status} value={status}>{status.toLowerCase()}</option>
             ))}
           </select>
                       </TableCell>

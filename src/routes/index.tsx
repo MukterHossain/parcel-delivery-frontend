@@ -17,6 +17,7 @@ import type { TRole } from "@/types";
 import Feature from "@/components/modules/feature/Feature";
 import Contact from "@/components/modules/contact/Contact";
 import Faq from "@/components/modules/faq/Faq";
+import ParcelTracking from "@/pages/Admin/ParcelTracking";
 
 
 export const router = createBrowserRouter([
@@ -54,7 +55,11 @@ export const router = createBrowserRouter([
                 index:true,
                 element: <Navigate to="/admin/analytics"></Navigate>
             },
-            ...generateRoutes(adminSidebar)
+            ...generateRoutes(adminSidebar),
+            {
+                path: "/admin/parcel-tracking/:trackingId",
+                Component: ParcelTracking
+            }
         ]
     },
     {

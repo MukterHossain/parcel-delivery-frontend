@@ -11,7 +11,7 @@ export default function Profile() {
   if(isLoading) return <div>Loading...</div>
   return (
     <div>
-      <div className="max-w-lg mx-auto block  border border-gray-300 sm:p-6 mt-4 sm:mt-0 shadow p-5 bg-linear-to-r/srgb from-indigo-200 to-teal-300 hover:bg-linear-to-r/srgb hover:from-teal-300 hover:to-indigo-200 rounded-xl duration-500 ease-in-out">
+      <div className="max-w-lg mx-auto block  border border-gray-300 sm:p-6 mt-4 sm:mt-0 shadow p-5 bg-linear-to-r/srgb from-indigo-200 to-teal-300 hover:bg-linear-to-r/srgb hover:from-teal-300 hover:to-indigo-200 rounded-xl duration-800 ease-in-out">
         <div className="flex flex-col sm:gap-4 lg:gap-6">
           <div className="flex justify-center  sm:shrink-0">
             <img
@@ -45,7 +45,7 @@ export default function Profile() {
 
               <h1 className="flex items-center justify-end gap-2">
                 <span>Role: </span>
-                <span className="font-bold text-lg sm:text-[16px] md:text-lg">{userInfo?.data?.role.toUpperCase()}</span>
+                <span className="font-bold text-lg sm:text-[16px] md:text-lg text-blue-800">{userInfo?.data?.role.toUpperCase()}</span>
               </h1>
             </div>
           </div>
