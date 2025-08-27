@@ -20,6 +20,14 @@ export const parcelApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ["PARCEL"],
         }),
+        statusUpdate: builder.mutation({
+            query: ({id, parcelStatus}) =>({
+                url: `/parcels/status-update/${id}`,
+                method: "PATCH",
+                data:{ parcelStatus},
+            }),
+            invalidatesTags: ["PARCEL"],
+        }),
         statusLogs: builder.query({
             query: (id) =>({
                 url: `/parcels/${id}/status-log`,
@@ -44,4 +52,4 @@ export const parcelApi = baseApi.injectEndpoints({
 
 
 
-export const { useAddParcelMutation, useStatusLogsQuery, useCancelParcelMutation, useGetSenderParcelsQuery, useAllReceiversQuery } = parcelApi
+export const { useAddParcelMutation, useStatusLogsQuery, useCancelParcelMutation, useGetSenderParcelsQuery, useAllReceiversQuery, useStatusUpdateMutation } = parcelApi

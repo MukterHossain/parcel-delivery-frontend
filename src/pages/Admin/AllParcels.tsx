@@ -1,10 +1,11 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { IParcelPackage } from "@/types";
-import { useAllParcelsQuery } from "@/redux/feature/admin/admin.api";
+import { useAllParcelsQuery, useStatusUpdateMutation } from "@/redux/feature/admin/admin.api";
 import { useState } from "react";
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import { Button } from "@/components/ui/button";
 import { Loader2Icon } from "lucide-react";
+import { toast } from "sonner";
+import { Link } from "react-router";
 
 
 export default function AllParcels() {
@@ -13,30 +14,73 @@ export default function AllParcels() {
   const [searchTerm, setSearchTerm] = useState("")
   const [status, setStatus] = useState("")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
+  // const [statusChange, setStatusChange] = useState(false)
+
+  const [statusUpdate] = useStatusUpdateMutation()
 
 
 
-  const { data: AllParcel, isLoading} = useAllParcelsQuery({ page: currentPage, limit, status, searchTerm, sort: sortOrder === "asc" ? "createdAt": "-createdAt" })
-  
-  // console.log("AllParcel", AllParcel)
+  const { data: AllParcel, isLoading } = useAllParcelsQuery({ page: currentPage, limit, status, searchTerm, sort: sortOrder === "asc" ? "createdAt" : "-createdAt" })
 
-  // console.log("currentPage", currentPage)
-  // console.log("limit", limit)
+
+
+  const handleStatusChange =async (id: string, newStatus:string) => {
+    console.log("id", id)
+      const toastId = toast.loading("User unblocking....")
+ 
+    try {
+      const res = await statusUpdate({id, status: newStatus}).unwrap()
+      console.log("res", res)
+      if (res.success) {
+        toast.success("Parcel status updated", { id: toastId })
+      }
+    } catch (err) {
+      console.error(err)
+      toast.error("Choose right status. Choose sequently", { id: toastId })
+    }
+  }
 
   const parcels = AllParcel?.data?.data || []
   const total = AllParcel?.data?.meta?.total || 0
   const totalPage = Math.ceil(total / limit)
-  // console.log("parcels", parcels)
+  console.log("parcels", parcels)
+
+  const transitionStatus: Record<string, string[]> ={
+    REQUESTED: ["APPROVED", "CANCELED", "BLOCKED", "UNBLOCKED"],
+    APPROVED: ["DISPATCHED"],
+    DISPATCHED: ["IN_TRANSIT"],
+    IN_TRANSIT: ["DELIVERED"],
+    DELIVERED: [],
+    CANCELED: [],
+    BLOCKED: ["UNBLOCKED"],
+    UNBLOCKED: ["BLOCKED"],
+  }
+
+     const statusColors: Record<string, string>
+={
+  REQUESTED: "text-blue-500",
+    APPROVED: "text-green-500",
+    DISPATCHED: "text-cyan-500",
+    IN_TRANSIT: "text-lime-500",
+    DELIVERED: "text-green-500",
+    CANCELED: "text-red-500",
+    BLOCKED: "text-shadow-amber-500",
+    UNBLOCKED: "text-green-500",
+}
+
+
+  if(isLoading) return <Loader2Icon className="animate-spin" />
   return (
     <div className="w-full max-w-7xl mx-auto px-5">
-      
-      <div className="flex justify-between my-8">
-        <h1 className="text-xl font-semibold">Delivery History</h1>
-        <div>
-          <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+ <h1 className="text-xl font-semibold">Delivery History</h1>
+      <div className="flex flex-col sm:flex-row my-8 items-center gap-8">
+       
+        <div className="border w-full sm:w-1/2 rounded-sm   py-1">
+          <input className="w-full px-2 outline-none" type="text" placeholder="Search by Type, trackId, delevery or pickup address ...." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
         </div>
-        <div>
-          <select value={status} onChange={(e) => setStatus(e.target.value)}>
+        <div className="w-full sm:w-1/2 flex  items-center gap-5">
+          <div className="border w-full  rounded-sm   py-1">
+          <select className="w-full px-2 outline-none" value={status} onChange={(e) => setStatus(e.target.value)}>
             <option value="">All</option>
             <option value="REQUESTED">REQUESTED</option>
             <option value="IN_TRANSIT">IN_TRANSIT</option>
@@ -46,22 +90,22 @@ export default function AllParcels() {
             <option value="UNBLOCKED">UNBLOCKED</option>
           </select>
         </div>
-      <div>
-        <button onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}>
-          {sortOrder === "asc" ? "Descending" : "Ascending"}
-        </button>
+        <div className="border  rounded-sm px-2  py-1">
+          <button className={`${sortOrder === "asc" ? "text-green-500" : "text-blue-500"}`} onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}>
+            {sortOrder === "asc" ? "Descending" : "Ascending"}
+          </button>
+        </div>
+        </div>
       </div>
-      </div>
-      <div className="border border-muted rounded-md">
-        {
-          parcels?.length> 0 ? (
+      <div className="overflow-x-auto border border-muted rounded-md">      
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="">Name</TableHead>
+                  <TableHead className="">Type</TableHead>
                   <TableHead className="">Delivery Address</TableHead>
                   <TableHead className="">Pickup Address</TableHead>
-                  <TableHead className="">Status</TableHead>
+                  <TableHead className="">TrackingId</TableHead>
+                  <TableHead className="">Status/Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -71,23 +115,28 @@ export default function AllParcels() {
                       <TableCell className="font-medium ">{item?.type}</TableCell>
                       <TableCell className="font-medium ">{item?.deliveryAddress}</TableCell>
                       <TableCell className="font-medium">{item?.pickupAddress}</TableCell>
-                      <TableCell className="font-medium"> {item?.status}</TableCell>
+                      <TableCell className="font-medium">{item?.trackingId}</TableCell>
+                      <TableCell className="font-medium">
+                        <Link to={`/admin/parcel-tracking/${item.trackingId}`}>Tracking</Link>
+                      </TableCell>
+                      <TableCell className="font-medium">
+                       <select className={`${statusColors[item?.status] || "text-gray-500"}`}  defaultValue={item?.status} onChange={(e) => handleStatusChange(item._id,e.target.value)}>
+            <option  value={item?.status}>{item?.status.toLowerCase()}</option>
+            {transitionStatus[item?.status]?.map(status => (
+              <option key={status} value={status}>{status.toLowerCase()}</option>
+            ))}
+          </select>
+                      </TableCell>
                     </TableRow>
                   ))
                 }
               </TableBody>
             </Table>
-          ) : (
-            <Button size="sm" className="w-full border-0 outline-0 bg-gray-50 text-black" disabled={isLoading}>
-              <Loader2Icon className="animate-spin" />
-              Please wait for comming parcels data ....
-            </Button>
-          )
-        }
+          
       </div>
       {
         totalPage > 1 && (
-          <div className="flex justify-end mt-4">
+          <div className="flex justify-center mt-4">
             <div>
               <Pagination>
                 <PaginationContent>
@@ -118,7 +167,7 @@ export default function AllParcels() {
               </Pagination>
             </div>
           </div>
-        )
+        ) 
       }
     </div>
   )

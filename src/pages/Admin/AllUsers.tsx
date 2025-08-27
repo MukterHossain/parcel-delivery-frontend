@@ -10,6 +10,7 @@ export default function AllUsers() {
     const {data: allUsers, isLoading} = useAllUsersQuery(undefined)
     const [userBlock] = useUserBlockMutation()
     const [userUnblock] = useUserUnblockMutation()
+    
     console.log("allUsers", allUsers) 
 
     const Users = allUsers?.data || []
@@ -29,7 +30,7 @@ export default function AllUsers() {
       }
     } catch (err) {
       console.error(err)
-      toast.error("Something went wrong", { id: toastId })
+      toast.error(err.data.message, { id: toastId })
     }
     }
     const handleUnblock = async (id:string) =>{
@@ -49,12 +50,14 @@ export default function AllUsers() {
 
     }
 
-    const roleColors: Record<string, string>
-={
+    
+
+    const roleColors: Record<string, string>={
   ADMIN : "text-pink-500",
   SENDER : "text-green-500",
   RECEIVER : "text-blue-500"
 }
+
     if(isLoading) return <h1>Loading...</h1>
       return (
     <div>

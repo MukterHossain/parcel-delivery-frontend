@@ -20,6 +20,14 @@ export const adminApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ["PARCEL"],
         }),
+        parcelBlock: builder.mutation({
+            query: ({id, status}) =>({
+                url: `/parcels/block/${id}`,
+                method: "PATCH",
+                data:{ status},
+            }),
+            invalidatesTags: ["PARCEL"],
+        }),
          allParcels: builder.query({
             query: ({page =1, limit = 10, status, searchTerm, sort }: {page?: number, limit?: number, status?: string, searchTerm?: string, sort?: string}) =>({
                 url: `/parcels`,
@@ -31,6 +39,13 @@ export const adminApi = baseApi.injectEndpoints({
         adminAnalytics: builder.query({
             query: () =>({
                 url: `/parcels/analytics`,
+                method: "GET",
+            }),
+            providesTags: ["PARCEL"],
+        }),
+        parcelTracking: builder.query({
+            query: (trackingId:string) =>({
+                url: `/parcels/track/${trackingId}`,
                 method: "GET",
             }),
             providesTags: ["PARCEL"],
@@ -67,4 +82,4 @@ export const adminApi = baseApi.injectEndpoints({
 
 
 
-export const {  useAllParcelsQuery, useStatusUpdateMutation,useStatusBlockMutation, useAllUsersQuery , useAdminAnalyticsQuery, useUserBlockMutation, useUserUnblockMutation} = adminApi
+export const {  useAllParcelsQuery, useStatusUpdateMutation,useStatusBlockMutation, useAllUsersQuery , useAdminAnalyticsQuery, useUserBlockMutation, useUserUnblockMutation, useParcelBlockMutation, useParcelTrackingQuery} = adminApi
