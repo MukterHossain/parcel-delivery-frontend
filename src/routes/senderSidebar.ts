@@ -1,7 +1,9 @@
 import AddParcel from "@/pages/Sender/AddParcel";
-import AllParcel from "@/pages/Sender/AllParcel";
-import SenderAnalytics from "@/pages/Sender/SenderAnalytics";
 import SenderProfile from "@/pages/Sender/SenderProfile";
+import { lazy } from "react";
+
+const AllParcel =lazy(() => import("@/pages/Sender/AllParcel"))
+const SenderAnalytics =lazy(() => import("@/pages/Sender/SenderAnalytics"))
 
 
 export const senderSidebar = [

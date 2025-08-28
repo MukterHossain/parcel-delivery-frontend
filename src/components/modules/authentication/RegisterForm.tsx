@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -54,14 +55,14 @@ export default function RegisterForm({
                 providerId: data.email
             }]
         }
-        console.log(userInfo)
+        
         try {
-            const res = await register(userInfo).unwrap()
-            console.log(res)
+             await register(userInfo).unwrap()
+            
             toast.success("User Created Successfully")
             navigate("/verify")
-        } catch (error) {
-            console.error(error)
+        } catch (error: any) {
+            toast.error(error?.data?.message || "Something went wrong")
         }
     }
     return (

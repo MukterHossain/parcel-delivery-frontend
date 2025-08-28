@@ -11,7 +11,6 @@ type ChartDataItem = {
 
 export default function Analytics() {
   const {data: anylyticsData, isLoading} = useAdminAnalyticsQuery(undefined)
-  console.log("anylyticsData", anylyticsData)
 
   if(isLoading) return <div>Loading...</div>
 
@@ -34,7 +33,6 @@ export default function Analytics() {
   const months = chartData.map((item: {month: string}) => item.month)
   const dateRange = months.length > 0 ? `${months[0]} - ${months[months.length -1]}`: ""
 
-console.log("chartData", chartData)
 const chartConfig = {
   count: {
     label: "Parcels",

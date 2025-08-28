@@ -19,12 +19,14 @@ import Contact from "@/components/modules/contact/Contact";
 import ParcelTracking from "@/pages/Admin/ParcelTracking";
 import Faq from "@/components/modules/faq/Faq";
 import SenderParcelTracking from "@/pages/Sender/SenderParcelTraking";
+import ErrorHandle from "@/error/ErrorHandle";
 
 
 export const router = createBrowserRouter([
     {
         path: '/',
         Component: App,
+        errorElement: <ErrorHandle></ErrorHandle>,
         children: [
             {
                 index:true,
@@ -80,7 +82,7 @@ export const router = createBrowserRouter([
         children: [
             {
                 index:true,
-                element: <Navigate to="/sender/analytics"></Navigate>
+                element: <Navigate to="/sender/analytic"></Navigate>
             },
             ...generateRoutes(senderSidebar),
             {

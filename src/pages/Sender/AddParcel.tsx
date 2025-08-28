@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon} from "lucide-react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import z from "zod";
 
@@ -36,8 +38,7 @@ export default function AddParcel() {
 const {data: getSender} = useUserInfoQuery(undefined)
    const [addParcel] = useAddParcelMutation()
   const { data: receivers } = useAllReceiversQuery(undefined)
-  // console.log("receivers", receivers)
-
+const navigate = useNavigate()
 
   const receiversOptions = receivers?.data?.map((receiver: { _id: string; name: string }) => ({
     value: receiver._id,
@@ -70,14 +71,15 @@ const {data: getSender} = useUserInfoQuery(undefined)
           receiver: values.receiverId,
           deliveryDate: values.deliveryDate ? new Date(values.deliveryDate).toISOString() : undefined
         }
-        console.log("parcelData", parcelData)
-        const res = await addParcel(parcelData).unwrap()
-        console.log(res)
+  
+  await addParcel(parcelData).unwrap()
+
         toast.success("Parcel created successfully", {id: toastId})
         form.reset();
-      } catch (err) {
-        console.error(err)
-        toast.error("Failed to create parcel", {id: toastId})
+        navigate("/sender/all-parcels")
+      } catch (err: any) {
+
+        toast.error( err?.data?.message ||"Failed to create parcel", {id: toastId})
       }
         
     }

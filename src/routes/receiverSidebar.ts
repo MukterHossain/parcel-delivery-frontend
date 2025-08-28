@@ -1,7 +1,11 @@
-import DeliveryHistory from "@/pages/Receiver/DeliveryHistory";
-import IncomingParcels from "@/pages/Receiver/IncomingParcels";
-import ReceiverAnalytics from "@/pages/Receiver/ReceiverAnalytics";
+
 import ReceiverProfile from "@/pages/Receiver/ReceiverProfile";
+import { lazy } from "react";
+
+const ReceiverAnalytics =lazy(() => import("@/pages/Receiver/ReceiverAnalytics"))
+const DeliveryHistory =lazy(() => import("@/pages/Receiver/DeliveryHistory"))
+const IncomingParcels =lazy(() => import("@/pages/Receiver/IncomingParcels"))
+
 
 
 

@@ -32,16 +32,17 @@ const navigationLinks = [
 ]
 export default function Navbar() {
 
-   const { data } = useUserInfoQuery(undefined)
+   const { data, isLoading } = useUserInfoQuery(undefined)
   const [logout] = useLogoutMutation()
   const dispatch = useAppDispatch()
-  console.log(data)
 
   const handleLogout = async () => {
     await logout(undefined)
     toast.success("Logout successfully")
     dispatch(authApi.util.resetApiState())
   }
+
+  if (isLoading) return <div>Loading...</div>
   return (
     <header className="border-b px-4 ">
       <div className="flex h-16 items-center justify-between gap-4">

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -19,13 +20,6 @@ const FormSchema = z.object({
     message: "Your one-time password must be 6 characters.",
   }),
 })
-// export function InputOTPForm() {
-//   const form = useForm<z.infer<typeof FormSchema>>({
-//     resolver: zodResolver(FormSchema),
-//     defaultValues: {
-//       pin: "",
-//     },
-//   })
 
 export default function Verify() {
   const location = useLocation()
@@ -52,8 +46,8 @@ const form = useForm<z.infer<typeof FormSchema>>({
         }
         setConfirmed(true)
       setTimer(120)
-      } catch (err) {
-        console.log(err)
+      } catch (err:any) {
+        toast.error( err?.data?.message ||"Something went wrong", {id: toastId})
       }
       
     }
@@ -70,17 +64,11 @@ const form = useForm<z.infer<typeof FormSchema>>({
         setConfirmed(true)
         navigate("/")
       }
-    } catch (err) {
-      console.log(err)
+    } catch (err :any) {
+      toast.error( err?.data?.message ||"Something went wrong", {id: toastId})
     }
 
   }
-
-  // useEffect(() => {
-  //   if (!email) {
-  //     navigate("/")
-  //   }
-  // }, [email])
 
   useEffect(() => {
     if(!email || !confirmed){
@@ -88,7 +76,6 @@ const form = useForm<z.infer<typeof FormSchema>>({
     }
     const timerId = setInterval(() =>{
       setTimer((prev) => (prev > 0 ? prev - 1 : 0))
-      console.log("Tick")
     }, 1000)
     return () => clearInterval(timerId)
   }, [email, confirmed])

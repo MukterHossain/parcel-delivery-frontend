@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useAllUsersQuery, useUserBlockMutation, useUserUnblockMutation } from "@/redux/feature/admin/admin.api"
@@ -11,41 +12,32 @@ export default function AllUsers() {
     const [userBlock] = useUserBlockMutation()
     const [userUnblock] = useUserUnblockMutation()
     
-    console.log("allUsers", allUsers) 
 
     const Users = allUsers?.data || []
-    console.log("Users", Users)
-
-
 
     const handleBlock = async(id:string) =>{
-      console.log("id", id)
       const toastId = toast.loading("User blocking....")
  
     try {
       const res = await userBlock({id, isActive: "BLOCKED"}).unwrap()
-      console.log("res", res)
       if (res.success) {
         toast.success("User blocked", { id: toastId })
       }
-    } catch (err) {
-      console.error(err)
-      toast.error(err.data.message, { id: toastId })
+    } catch (err: any) {
+      toast.error(err?.data?.message ||"Something went wrong", { id: toastId })
     }
     }
     const handleUnblock = async (id:string) =>{
-      console.log("id", id)
       const toastId = toast.loading("User unblocking....")
  
     try {
       const res = await userUnblock({id, isActive: "UNBLOCKED"}).unwrap()
-      console.log("res", res)
+
       if (res.success) {
         toast.success("User unblocked", { id: toastId })
       }
-    } catch (err) {
-      console.error(err)
-      toast.error("Something went wrong", { id: toastId })
+    } catch (err: any) {
+      toast.error( err?.data?.message ||"Something went wrong", { id: toastId })
     }
 
     }

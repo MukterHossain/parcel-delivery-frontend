@@ -7,7 +7,6 @@ import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 export default function ReceiverAnalytics() {
   const {data: anylyticData, isLoading} = useReceiverAnalyticsQuery(undefined)
-  console.log("anylyticsData", anylyticData)
 
   if(isLoading) return <div>Loading...</div>
 

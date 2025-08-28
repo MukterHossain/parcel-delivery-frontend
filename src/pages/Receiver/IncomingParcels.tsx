@@ -6,13 +6,9 @@ import { Button } from "@/components/ui/button"
 
 
 export default function IncomingParcels() {
-    const {data: incomingParcel} = useIncomingParcelQuery(undefined)
-    console.log("incomingParcel", incomingParcel)
+    const {data: incomingParcel, isLoading} = useIncomingParcelQuery(undefined)
 
-    //  const parcels = incomingParcel?.data?.slice()?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    // console.log("parcels", parcels)
-
-
+if(isLoading) return <div>Loading...</div>
   return (
     <div className="w-full max-w-7xl mx-auto px-5">
       <div className="flex justify-between my-8">

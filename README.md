@@ -1,69 +1,66 @@
-# React + TypeScript + Vite
+# Parcel Delivery frontend (React + Redux Toolkit + RTK Query)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### **✅ Project Overview**
 
-Currently, two official plugins are available:
+A secure, **role-based** and user-friendly **Parcel Delivery Frontend** built with **React, Redux Toolkit, RTK Query, and TypeScript**. This app allows **Senders, Receiver, and Admins** to seamlessly mange parcel delivery operation, track shipments, and interact with the system through a clean responsive dashboard interface.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Live Link
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Frontend URL:** []
+- **Backend URL:** []
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## 🛠 Project Tech Stack
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### **Frontend**
+- React.js (With TypeScrit)
+- React Router Dom
+- Redux Toolkit + RTK Query (Sate Management & API Integration)
+- Tailwind CSS (Styling)
+- React Hook Form (Form Validation)
+- Toast Notifications 
+  
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📌 Features
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### **Public Landing Pages**
+- **Home Page:** Service introduction 
+- **About Page** Mission, vission & company information
+- **Contact Page:** Inquiry form (simulate submission)
+  
+### **Authentication**
+- JWT-based authentication with persisted login state
+- Registration with role selection (**Sender/Receiver**)
+- Login & Logout functionality
+- Role-based rediection
+  
+### **Sender Dashboard**
+- Create parcel delivery requests
+- Cancel parcels (if not dispached)
+- Viw all created parcels with status logs
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### **Receiver Dashboard**
+- View incoming parcels
+- Confirm parcel delivery
+- Viw delivery history
+
+### **Admin Dashboard**
+- Manage users (block/unblock)
+- Mange parcels (update status, block/unblock)
+
+### **Parcel Tracking**
+- Search parcels using **unique tracking ID**
+- View parcel details with **status timeline**
+
+### **General Features**
+- Role-based navigation
+- Global loading indicators & error handling
+- Pagination, search & filtering
+- Form validations
+- Toast notifications for success/error feedback
+- Charts & Data Visualization (Bar charts for parcel statistics)
+- Responsive, clean, and accessible UI

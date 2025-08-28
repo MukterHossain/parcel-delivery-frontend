@@ -5,13 +5,6 @@ import { useParams } from "react-router"
 export default function ParcelTracking() {
     const {trackingId} = useParams<{trackingId: string}>()
     const {data: parcelTracking, isLoading, error} = useParcelTrackingQuery(trackingId!, {skip: !trackingId})
-console.log("trackingId", trackingId)
-
-
-
-
-    console.log("parcelTracking", parcelTracking)
-
 
 
     if(isLoading) return <div>Loading...</div>

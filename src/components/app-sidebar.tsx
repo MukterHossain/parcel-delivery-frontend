@@ -21,13 +21,10 @@ import Logo from "@/assets/logo/Logo.png"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const {data:userData} = useUserInfoQuery(undefined)
-  // console.log("userData", userData)
   const data = {
     versions: ["1.0.1", "1.1.0-alpha", "2.0.0-beta1"],
     navMain: getSidebarItems(userData?.data?.role)
-    // navMain: adminSidebarItems,
   }
-  console.log("role data", userData?.data?.role)
   return (
     <Sidebar {...props}>
       <SidebarHeader>

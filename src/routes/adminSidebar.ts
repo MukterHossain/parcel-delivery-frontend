@@ -1,8 +1,12 @@
-import AllParcels from "@/pages/Admin/AllParcels";
-import AllUsers from "@/pages/Admin/AllUsers";
-import Analytics from "@/pages/Admin/Analytics";
+
 import Profile from "@/pages/Admin/Profile";
 import type { ISideBarItem } from "@/types";
+import { lazy } from "react";
+
+const Analytics =lazy(() => import("@/pages/Admin/Analytics"))
+const AllParcels =lazy(() => import("@/pages/Admin/AllParcels"))
+const AllUsers =lazy(() => import("@/pages/Admin/AllUsers"))
+
 
 export const adminSidebar: ISideBarItem[] = [
     {

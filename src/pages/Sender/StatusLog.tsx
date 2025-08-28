@@ -12,7 +12,7 @@ interface IProps {
 }
 export function StatusLog({children, id}:IProps) {
   const {data:statusData, isLoading} = useStatusLogsQuery(id, {skip: !id})
-console.log("statusData", statusData)
+
   return (
     <Dialog >
   <DialogTrigger  asChild>{children}</DialogTrigger>

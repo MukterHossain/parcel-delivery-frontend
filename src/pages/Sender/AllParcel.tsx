@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DeleteConfirmation } from "@/components/DeleteConfirmation";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -13,20 +14,17 @@ export default function AllParcel() {
 
   const {data:senderData , isLoading, error} = useGetSenderParcelsQuery(undefined)
   const [cancelParcel] = useCancelParcelMutation()
-  console.log("senderData", senderData)
 
   const handleRemoveParcel = async(id:string) => {
-    console.log(id)
     const toastId = toast.loading("Canceling....")
  
     try {
       const res = await cancelParcel({id, status: "CANCELED"}).unwrap()
-      console.log("res", res)
       if (res.success) {
         toast.success("Removed", { id: toastId })
       }
-    } catch (err) {
-      console.error(err)
+    } catch (err: any) {
+      toast.error( err?.data?.message ||"Something went wrong", { id: toastId })
     }
   }
 
@@ -56,7 +54,9 @@ export default function AllParcel() {
               <TableHead className="">Name</TableHead>
               <TableHead className="">Delivery Address</TableHead>
               <TableHead className="">Status</TableHead>
-              <TableHead className="text-right">Action</TableHead>
+              <TableHead className="text-right">Tracking</TableHead>
+              <TableHead className="text-right">Status Log</TableHead>
+              <TableHead className="text-right">Cancel</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

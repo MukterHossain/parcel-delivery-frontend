@@ -7,9 +7,7 @@ import type { IParcelPackage } from "@/types"
 
 export default function DeliveryHistory() {
     const {data: deliveryHistory } = useDeliveryHistoryQuery(undefined)
-    console.log("deliveryHistory", deliveryHistory)
-     const parcels = deliveryHistory?.data?.slice()?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    console.log("parcels", parcels)
+     const parcels = deliveryHistory?.data?.slice()?.sort((a: IParcelPackage, b: IParcelPackage) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
   return (
     <div className="w-full max-w-7xl mx-auto px-5">
       <div className="flex justify-between my-8">

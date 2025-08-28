@@ -3,7 +3,6 @@ import photo from "@/assets/images/photo.jpg"
 
 export default function SenderProfile() {
   const { data: userInfo , isLoading} = useUserInfoQuery(undefined)
-  console.log("userInfo", userInfo)
 
   if(isLoading) return <div>Loading...</div>
   return (

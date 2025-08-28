@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { IParcelPackage } from "@/types";
 import { useAllParcelsQuery, useStatusUpdateMutation } from "@/redux/feature/admin/admin.api";
@@ -10,40 +12,33 @@ import { Link } from "react-router";
 
 export default function AllParcels() {
   const [currentPage, setCurrentPage] = useState(1)
-  const [limit, setLimit] = useState(10)
+  const [limit, ] = useState(10)
   const [searchTerm, setSearchTerm] = useState("")
   const [status, setStatus] = useState("")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
-  // const [statusChange, setStatusChange] = useState(false)
 
   const [statusUpdate] = useStatusUpdateMutation()
 
-
-
   const { data: AllParcel, isLoading } = useAllParcelsQuery({ page: currentPage, limit, status, searchTerm, sort: sortOrder === "asc" ? "createdAt" : "-createdAt" })
 
-
-
   const handleStatusChange =async (id: string, newStatus:string) => {
-    console.log("id", id)
+  
       const toastId = toast.loading("User unblocking....")
  
     try {
       const res = await statusUpdate({id, status: newStatus}).unwrap()
-      console.log("res", res)
+      
       if (res.success) {
         toast.success("Parcel status updated", { id: toastId })
       }
-    } catch (err) {
-      console.error(err)
-      toast.error("Choose right status. Choose sequently", { id: toastId })
+    } catch (err:any) {
+      toast.error( err?.data?.message || "Choose right status. Choose sequently", { id: toastId })
     }
   }
 
   const parcels = AllParcel?.data?.data || []
   const total = AllParcel?.data?.meta?.total || 0
   const totalPage = Math.ceil(total / limit)
-  console.log("parcels", parcels)
 
   const transitionStatus: Record<string, string[]> ={
     REQUESTED: ["APPROVED", "CANCELED", "BLOCKED", "UNBLOCKED"],
