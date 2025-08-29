@@ -1,5 +1,4 @@
 import { baseApi } from "@/redux/baseApi";
-// import type {  IParcelPackage } from "@/types";
 
 
 export const receiverApi = baseApi.injectEndpoints({

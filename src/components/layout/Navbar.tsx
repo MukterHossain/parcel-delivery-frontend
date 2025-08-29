@@ -18,7 +18,7 @@ import { useAppDispatch } from "@/redux/hook"
 import { toast } from "sonner"
 import { role } from "@/constants/role"
 
-// Navigation links array to be used in both desktop and mobile menus
+
 const navigationLinks = [
   { href: "/", label: "Home", role: "PUBLIC" },
   { href: "/about", label: "About", role: "PUBLIC" },
