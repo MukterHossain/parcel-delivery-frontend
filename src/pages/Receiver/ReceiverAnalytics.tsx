@@ -1,89 +1,101 @@
-import { Card, CardContent,  CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import Loading from "@/loading/Loading";
 
 import { useReceiverAnalyticsQuery } from "@/redux/feature/receiver/receiver.api";
 import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 export default function ReceiverAnalytics() {
-  const {data: anylyticData, isLoading} = useReceiverAnalyticsQuery(undefined)
+  const { data: anylyticData, isLoading } = useReceiverAnalyticsQuery(undefined)
 
-  if(isLoading) return <div>Loading...</div>
 
-  const data = anylyticData?.data 
+  const data = anylyticData?.data
 
-  const monthlyData = data?.monthlyPacelStats?.map((item: {_id: { month: number; year: number}; count: number}) => ({
-    month: new Date( item._id.year, item._id.month -1).toLocaleString("default", {month: "short", year: "numeric"}) ,
-    total: item.count,
+  const monthlyData = data?.monthlyPacelStats?.map((item: {
+    _id: { month: number; year: number };
+    delivered: number;
+    inTransit: number;
+    canceled: number;
+    total: number
+  }) => ({
+    month: new Date(item._id.year, item._id.month - 1).toLocaleString("default", { month: "short", year: "numeric" }),
+    delivered: item.delivered || 0,
+    inTransit: item.inTransit || 0,
+    canceled: item.canceled || 0,
+    total: item.total,
   })) || [];
 
 
-const chartConfig = {
-  count: {
-    label: "Parcels",
-    color: "var(--color-desktop)",
-  },
-}
-  
+  const chartConfig = {
+    delivered: { label: "Delivered", color: "#4ade80" },
+    inTransit: { label: "In Transit", color: "#fbbf24" },
+    canceled: { label: "Canceled", color: "#ef4444" },
+    total: { label: "Total", color: "#3b82f6" },
+  }
 
+  if (isLoading) return <Loading></Loading>
   return (
-    <div className=" md:1/2 text-muted mx-auto px-4 sm:px-6 lg:px-8">
-      <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+    <div className=" w-4/5 sm:w-3/5 text-muted mx-auto px-4 sm:px-6 lg:px-8">
+      <div className=" grid grid-cols-1 sm:grid-cols-2  gap-4">
         <div className="mt-4 sm:mt-0 shadow p-5 bg-linear-to-r/srgb from-indigo-200 to-teal-300 hover:bg-linear-to-r/srgb hover:from-teal-300 hover:to-indigo-200 rounded-xl duration-500 ease-in-out">
-            <h3 className="text-md font-medium text-pretty text-gray-900 flex flex-col items-center">
-              <span className="font-bold text-2xl sm:text-4xl">{data?.totalPacelReceived ? data?.totalPacelReceived : 0}</span>
-              <span>Total Pacel Received</span> 
-            </h3>             
-          </div>
-        <div className="mt-4 sm:mt-0 shadow p-5 bg-linear-to-r/srgb from-indigo-200 to-teal-300 hover:bg-linear-to-r/srgb hover:from-teal-300 hover:to-indigo-200 rounded-xl duration-500 ease-in-out">
-            <h3 className="text-md font-medium text-pretty text-gray-900 flex flex-col items-center">
-              <span className="font-bold text-2xl sm:text-4xl">{data?.deliveredParcels ? data?.deliveredParcels : 0}</span>
-              <span>Delivered Parcels</span> 
-            </h3>           
-          </div>
-        <div className="mt-4 sm:mt-0 shadow p-5 bg-linear-to-r/srgb from-indigo-200 to-teal-300 hover:bg-linear-to-r/srgb hover:from-teal-300 hover:to-indigo-200 rounded-xl duration-500 ease-in-out">
-            
-            <h3 className="text-md font-medium text-pretty text-gray-900 flex flex-col items-center">
-              <span className="font-bold text-2xl sm:text-4xl">{data?.intransitParcels ? data?.intransitParcels : 0}</span>
-              <span>In Iransit Parcels</span> 
-            </h3>            
-          </div>
-        <div className="mt-4 sm:mt-0 shadow p-5 bg-linear-to-r/srgb from-indigo-200 to-teal-300 hover:bg-linear-to-r/srgb hover:from-teal-300 hover:to-indigo-200 rounded-xl duration-500 ease-in-out">
-            <h3 className="text-md font-medium text-pretty text-gray-900 flex flex-col items-center">
-              <span className="font-bold text-2xl sm:text-4xl">{data?.canceledParcel ? data?.canceledParcel : 0}</span>
-              <span>Canceled Parcel</span> 
-            </h3>             
-          </div>
-          </div>
-          <div className="mt-8">
-            <Card>
-      <CardHeader>
-        <CardTitle>May Parcel History</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart  data={monthlyData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis
-              dataKey="month"
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="dashed" />}
-            />
-            <Bar dataKey="total"  fill="#72ec0d" radius={4} />
-            
-          </BarChart>
-        </ChartContainer>
-      </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 leading-none font-medium">
-          Showing total parcels by month <TrendingUp className="h-4 w-4" />
+          <h3 className="text-md font-medium text-pretty text-gray-900 flex flex-col items-center">
+            <span className="font-bold text-center text-4xl sm:text-7xl">{data?.totalPacelReceived ? data?.totalPacelReceived : 0}</span>
+            <span className="text-center">Total Pacel Received</span>
+          </h3>
         </div>
-      </CardFooter>
-    </Card>
-          </div>
-      
+        <div className="mt-4 sm:mt-0 shadow p-5 bg-linear-to-r/srgb from-indigo-200 to-teal-300 hover:bg-linear-to-r/srgb hover:from-teal-300 hover:to-indigo-200 rounded-xl duration-500 ease-in-out">
+          <h3 className="text-md font-medium text-pretty text-gray-900 flex flex-col items-center">
+            <span className="font-bold text-4xl sm:text-7xl">{data?.deliveredParcels ? data?.deliveredParcels : 0}</span>
+            <span className="text-center">Delivered Parcels</span>
+          </h3>
+        </div>
+        <div className="mt-4 sm:mt-0 shadow p-5 bg-linear-to-r/srgb from-indigo-200 to-teal-300 hover:bg-linear-to-r/srgb hover:from-teal-300 hover:to-indigo-200 rounded-xl duration-500 ease-in-out">
+
+          <h3 className="text-md font-medium text-pretty text-gray-900 flex flex-col items-center">
+            <span className="font-bold text-center text-4xl sm:text-7xl">{data?.intransitParcels ? data?.intransitParcels : 0}</span>
+            <span className="text-center">In Iransit Parcels</span>
+          </h3>
+        </div>
+        <div className="mt-4 sm:mt-0 shadow p-5 bg-linear-to-r/srgb from-indigo-200 to-teal-300 hover:bg-linear-to-r/srgb hover:from-teal-300 hover:to-indigo-200 rounded-xl duration-500 ease-in-out">
+          <h3 className="text-md font-medium text-pretty text-gray-900 flex flex-col items-center">
+            <span className="font-bold text-center text-4xl sm:text-7xl">{data?.canceledParcel ? data?.canceledParcel : 0}</span>
+            <span className="text-center">Canceled Parcel</span>
+          </h3>
+        </div>
+      </div>
+      <div className="mt-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>May Parcel History</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={chartConfig}>
+              <BarChart data={monthlyData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="month"
+                />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent indicator="dashed" />}
+                />
+                <Bar dataKey="delivered" stackId={"a"} fill={chartConfig.delivered.color} radius={4} />
+                <Bar dataKey="inTransit" stackId={"a"} fill={chartConfig.inTransit.color} radius={4} />
+                <Bar dataKey="canceled" stackId={"a"} fill={chartConfig.canceled.color} radius={4} />
+                <Bar dataKey="total" stackId={"a"} fill={chartConfig.total.color} radius={4} />
+
+              </BarChart>
+            </ChartContainer>
+          </CardContent>
+          <CardFooter className="flex-col items-start gap-2 text-sm">
+            <div className="flex gap-2 leading-none font-medium">
+              Showing total parcels by month <TrendingUp className="h-4 w-4" />
+            </div>
+          </CardFooter>
+        </Card>
+      </div>
+
     </div>
   )
 }

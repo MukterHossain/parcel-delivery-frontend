@@ -62,7 +62,7 @@ const form = useForm<z.infer<typeof FormSchema>>({
       if(res.success){
         toast.success("OTP veryfied successfully", {id: toastId})
         setConfirmed(true)
-        navigate("/")
+        navigate("/login")
       }
     } catch (err :any) {
       toast.error( err?.data?.message ||"Something went wrong", {id: toastId})

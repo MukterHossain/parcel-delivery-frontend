@@ -20,6 +20,7 @@ import ParcelTracking from "@/pages/Admin/ParcelTracking";
 import Faq from "@/components/modules/faq/Faq";
 import SenderParcelTracking from "@/pages/Sender/SenderParcelTraking";
 import ErrorHandle from "@/error/ErrorHandle";
+import PublicParcelTracking from "@/pages/PublicParcelTracking";
 
 
 export const router = createBrowserRouter([
@@ -39,6 +40,10 @@ export const router = createBrowserRouter([
             {
                 path: '/feature',
                 Component: Feature
+            },
+            {
+                path: '/track-parcel',
+                Component: PublicParcelTracking
             },
             {
                 path: '/contact',
@@ -71,7 +76,7 @@ export const router = createBrowserRouter([
         children: [
             {
                 index:true,
-                element: <Navigate to="/receiver/profile"></Navigate>
+                element: <Navigate to="/receiver/Analytics"></Navigate>
             },
             ...generateRoutes(receiverSidebar)
         ]

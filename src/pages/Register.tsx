@@ -1,13 +1,14 @@
 import RegisterForm from "@/components/modules/authentication/RegisterForm";
 import { Link } from "react-router";
 import Logo from "@/assets/logo/Logo.png"
+import register from "@/assets/images//register.png"
 
 export default function Register() {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="relative hidden bg-muted lg:block">
         <img 
-        // src={TravelRegister} 
+        src={register} 
         alt="Image" className="absolute inset-0 h-full object-cover dark:brightness-[0.8]" />
       </div>
       <div className="flex flex-col gap-4 p-6 md:p-10">

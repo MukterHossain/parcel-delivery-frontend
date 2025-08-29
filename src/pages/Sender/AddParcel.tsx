@@ -8,11 +8,12 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import Loading from "@/loading/Loading";
 import { useUserInfoQuery } from "@/redux/feature/auth/auth.api";
-import { useAddParcelMutation, useAllReceiversQuery} from "@/redux/feature/parcel/parcel.api";
+import { useAddParcelMutation, useAllReceiversQuery } from "@/redux/feature/parcel/parcel.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { CalendarIcon} from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
@@ -21,24 +22,24 @@ import z from "zod";
 
 
 const parceSchema = z.object({
-    type: z.string().min(3, { message: "Parcel type is too short" }).max(50),
-    weight: z.number().min(0, { message: "Weight is required and should be greater than 0" }).max(50),
-    fee: z.number().min(0, { message: "Fee is required and should be greater than 0" }),
-    pickupAddress: z.string().min(3, { message: "Pickup Address is required" }).max(100),
-    deliveryAddress: z.string().min(3, { message: "Delivery Address is required" }).max(100),
-    deliveryDate: z.date().optional(),
-    description: z.string().optional(),
-    receiverId: z.string().min(3, { message: "Receiver is required" }).max(100),
-    status: z.enum(["REQUESTED", "APPROVED", "DISPATCHED", "IN_TRANSIT","DELIVERED", "CANCELED","BLOCKED", "UNBLOCKED"]),
+  type: z.string().min(3, { message: "Parcel type is too short" }).max(50),
+  weight: z.number().min(0, { message: "Weight is required and should be greater than 0" }).max(50),
+  fee: z.number().min(0, { message: "Fee is required and should be greater than 0" }),
+  pickupAddress: z.string().min(3, { message: "Pickup Address is required" }).max(100),
+  deliveryAddress: z.string().min(3, { message: "Delivery Address is required" }).max(100),
+  deliveryDate: z.date().optional(),
+  description: z.string().optional(),
+  receiverId: z.string().min(3, { message: "Receiver is required" }).max(100),
+  status: z.enum(["REQUESTED", "APPROVED", "DISPATCHED", "IN_TRANSIT", "DELIVERED", "CANCELED", "BLOCKED", "UNBLOCKED"]),
 
 })
 type ParcelFormValues = z.infer<typeof parceSchema>
 
 export default function AddParcel() {
-const {data: getSender} = useUserInfoQuery(undefined)
-   const [addParcel] = useAddParcelMutation()
-  const { data: receivers } = useAllReceiversQuery(undefined)
-const navigate = useNavigate()
+  const { data: getSender } = useUserInfoQuery(undefined)
+  const [addParcel] = useAddParcelMutation()
+  const { data: receivers, isLoading } = useAllReceiversQuery(undefined)
+  const navigate = useNavigate()
 
   const receiversOptions = receivers?.data?.map((receiver: { _id: string; name: string }) => ({
     value: receiver._id,
@@ -47,43 +48,44 @@ const navigate = useNavigate()
   )
   const senderId = getSender?.data?._id;
 
-    const form = useForm<ParcelFormValues>({
-        resolver: zodResolver(parceSchema),
-        defaultValues: {
-            type: "",
-            weight: 0,
-            fee: 0,            
-            pickupAddress: "",
-            deliveryAddress: "",
-            deliveryDate: undefined,
-            description: "",
-            receiverId: "",
-            status: "REQUESTED",
-        }
-    })
+  const form = useForm<ParcelFormValues>({
+    resolver: zodResolver(parceSchema),
+    defaultValues: {
+      type: "",
+      weight: 0,
+      fee: 0,
+      pickupAddress: "",
+      deliveryAddress: "",
+      deliveryDate: undefined,
+      description: "",
+      receiverId: "",
+      status: "REQUESTED",
+    }
+  })
 
-    const handleSubmit = async(values: ParcelFormValues) =>{
-      const toastId = toast.loading("Creating parcel....");
-      try {
-        const parcelData = {
-          ...values,
-          sender: senderId,
-          receiver: values.receiverId,
-          deliveryDate: values.deliveryDate ? new Date(values.deliveryDate).toISOString() : undefined
-        }
-  
-  await addParcel(parcelData).unwrap()
-
-        toast.success("Parcel created successfully", {id: toastId})
-        form.reset();
-        navigate("/sender/all-parcels")
-      } catch (err: any) {
-
-        toast.error( err?.data?.message ||"Failed to create parcel", {id: toastId})
+  const handleSubmit = async (values: ParcelFormValues) => {
+    const toastId = toast.loading("Creating parcel....");
+    try {
+      const parcelData = {
+        ...values,
+        sender: senderId,
+        receiver: values.receiverId,
+        deliveryDate: values.deliveryDate ? new Date(values.deliveryDate).toISOString() : undefined
       }
-        
+
+      await addParcel(parcelData).unwrap()
+
+      toast.success("Parcel created successfully", { id: toastId })
+      form.reset();
+      navigate("/sender/all-parcels")
+    } catch (err: any) {
+
+      toast.error(err?.data?.message || "Failed to create parcel", { id: toastId })
     }
 
+  }
+
+  if (isLoading) return <Loading></Loading>
   return (
     <div className="w-full max-w-4xl mx-auto px-5 mt-16">
       <Card>
@@ -119,7 +121,7 @@ const navigate = useNavigate()
                     <FormItem className="flex-1">
                       <FormLabel>Weight(kg)</FormLabel>
                       <FormControl>
-                        <Input type="number"  value={field.value} onChange={(e) => field.onChange(parseFloat(e.target.value))}  />
+                        <Input type="number" value={field.value} onChange={(e) => field.onChange(parseFloat(e.target.value))} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -132,7 +134,7 @@ const navigate = useNavigate()
                     <FormItem className="flex-1">
                       <FormLabel>Fee</FormLabel>
                       <FormControl>
-                        <Input type="number" value={field.value} onChange={(e) => field.onChange(parseFloat(e.target.value))}  />
+                        <Input type="number" value={field.value} onChange={(e) => field.onChange(parseFloat(e.target.value))} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -167,10 +169,10 @@ const navigate = useNavigate()
                   )}
                 />
               </div>
-              
+
               <div className="flex gap-5">
-                
-                 <FormField
+
+                <FormField
                   control={form.control}
                   name="receiverId" render={({ field }) => (
                     <FormItem className="flex-1">
@@ -225,7 +227,7 @@ const navigate = useNavigate()
                         <PopoverContent className="w-auto p-0" align="start">
                           <Calendar
                             mode="single"
-                            selected={(field.value ? new Date(field.value): undefined)}
+                            selected={(field.value ? new Date(field.value) : undefined)}
                             onSelect={field.onChange}
                             disabled={(date) =>
                               date <
@@ -241,8 +243,8 @@ const navigate = useNavigate()
                     </FormItem>
                   )}
                 />
-                
-              </div> 
+
+              </div>
               <div className="flex gap-5 items-stretch">
                 <FormField
                   control={form.control}
@@ -258,7 +260,7 @@ const navigate = useNavigate()
                   )}
                 />
               </div>
-              
+
             </form>
           </Form>
         </CardContent>

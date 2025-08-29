@@ -4,31 +4,32 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useCancelParcelMutation, useGetSenderParcelsQuery } from "@/redux/feature/parcel/parcel.api"
 import type { IParcelPackage } from "@/types";
-import {  X } from "lucide-react";
+import { X } from "lucide-react";
 import { toast } from "sonner";
 import { StatusLog } from "./StatusLog";
 import { Link } from "react-router";
+import Loading from "@/loading/Loading";
 
 
 export default function AllParcel() {
 
-  const {data:senderData , isLoading, error} = useGetSenderParcelsQuery(undefined)
+  const { data: senderData, isLoading, error } = useGetSenderParcelsQuery(undefined)
   const [cancelParcel] = useCancelParcelMutation()
 
-  const handleRemoveParcel = async(id:string) => {
+  const handleRemoveParcel = async (id: string) => {
     const toastId = toast.loading("Canceling....")
- 
+
     try {
-      const res = await cancelParcel({id, status: "CANCELED"}).unwrap()
+      const res = await cancelParcel({ id, status: "CANCELED" }).unwrap()
       if (res.success) {
-        toast.success("Removed", { id: toastId })
+        toast.success("Parcel canceled", { id: toastId })
       }
     } catch (err: any) {
-      toast.error( err?.data?.message ||"Something went wrong", { id: toastId })
+      toast.error(err?.data?.message || "Something went wrong", { id: toastId })
     }
   }
 
- 
+
 
   const statusColors: Record<string, string> = {
     REQUESTED: "text-green-500",
@@ -37,15 +38,15 @@ export default function AllParcel() {
     CANCELED: "text-red-500",
     BLOCKED: "text-red-500",
     UNBLOCKED: "text-green-500",
- }
- 
-    if(isLoading) return <div>Loading...</div>
-    if(error) return <div>Failed to load parcel tracking</div>
+  }
+
+  if (isLoading) return <Loading></Loading>
+  if (error) return <div>Failed to load parcel tracking</div>
 
   return (
     <div className="w-full max-w-7xl mx-auto px-5">
-      <div className="flex justify-between my-8">
-        <h1 className="text-xl font-semibold">All Parcels</h1>
+      <div className="flex justify-between mb-8 mt-2">
+        <h1 className="text-2xl  inline-block text-green-900 font-bold text-pretty bg-linear-to-r/srgb from-indigo-200 to-teal-300 hover:bg-linear-to-r/srgb hover:from-teal-300 hover:to-indigo-200 py-2 px-4 rounded-lg  ">All Parcels</h1>
       </div>
       <div className="border border-muted rounded-md">
         <Table>
@@ -54,9 +55,9 @@ export default function AllParcel() {
               <TableHead className="">Name</TableHead>
               <TableHead className="">Delivery Address</TableHead>
               <TableHead className="">Status</TableHead>
-              <TableHead className="text-right">Tracking</TableHead>
-              <TableHead className="text-right">Status Log</TableHead>
-              <TableHead className="text-right">Cancel</TableHead>
+              <TableHead className="">Tracking</TableHead>
+              <TableHead className="">Status Log</TableHead>
+              <TableHead className="">Cancel</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -73,15 +74,15 @@ export default function AllParcel() {
                   </TableCell>
                   <TableCell className="font-medium">
                     <StatusLog id={item?._id}>
-                        <Button size={"sm"}>Staus Log</Button>
+                      <Button size={"sm"}>Staus Log</Button>
                     </StatusLog>
-                    
+
                   </TableCell>
                   <TableCell className="font-medium">
                     <DeleteConfirmation onConfirm={() => handleRemoveParcel(item?._id)}>
-                      <Button disabled={item?.status === "DISPATCHED" || item?.status === "DELIVERED" || item?.status === "CANCELED"}  size="sm"> <X />
+                      <Button disabled={item?.status === "DISPATCHED" || item?.status === "DELIVERED" || item?.status === "CANCELED"} size="sm"> <X />
                       </Button>
-                      
+
                     </DeleteConfirmation>
                   </TableCell>
                 </TableRow>

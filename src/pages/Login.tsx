@@ -1,6 +1,8 @@
 import LoginForm from "@/components/modules/authentication/LoginForm";
 import { Link } from "react-router";
 import Logo from "@/assets/logo/Logo.png"
+import login from "@/assets/images/login.png"
+
 
 export default function Login() {
   return (
@@ -19,7 +21,7 @@ export default function Login() {
       </div>
       <div className="relative hidden bg-muted lg:block">
         <img
-        //   src={TravelLogin}
+          src={login}
           alt="Image"
           className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.8]"
         />

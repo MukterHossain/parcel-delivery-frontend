@@ -38,7 +38,7 @@ export const adminApi = baseApi.injectEndpoints({
         }),
         adminAnalytics: builder.query({
             query: () =>({
-                url: `/parcels/analytics`,
+                url: `/parcels/admin-analytics`,
                 method: "GET",
             }),
             providesTags: ["PARCEL"],

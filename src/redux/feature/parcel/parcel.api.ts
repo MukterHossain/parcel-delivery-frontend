@@ -1,11 +1,11 @@
 import { baseApi } from "@/redux/baseApi";
-import type {  IParcelPackage } from "@/types";
+import type { IParcelPackage } from "@/types";
 
 
 export const parcelApi = baseApi.injectEndpoints({
-    endpoints: (builder) =>({
+    endpoints: (builder) => ({
         addParcel: builder.mutation<null, Partial<IParcelPackage>>({
-            query: (parceInfo) =>({
+            query: (parceInfo) => ({
                 url: "/parcels",
                 method: "POST",
                 data: parceInfo,
@@ -13,52 +13,52 @@ export const parcelApi = baseApi.injectEndpoints({
             invalidatesTags: ["PARCEL"],
         }),
         cancelParcel: builder.mutation({
-            query: ({id, status}) =>({
+            query: ({ id, status }) => ({
                 url: `/parcels/cancel/${id}`,
                 method: "PATCH",
-                data:{ status},
-            }),
-            invalidatesTags: ["PARCEL"],
-        }),
-        statusUpdate: builder.mutation({
-            query: ({id, parcelStatus}) =>({
-                url: `/parcels/status-update/${id}`,
-                method: "PATCH",
-                data:{ parcelStatus},
+                data: { status },
             }),
             invalidatesTags: ["PARCEL"],
         }),
         statusLogs: builder.query({
-            query: (id) =>({
+            query: (id) => ({
                 url: `/parcels/${id}/status-log`,
                 method: "GET",
             }),
         }),
-       
+
 
         allReceivers: builder.query({
-            query: () =>({
+            query: () => ({
                 url: "/user/receivers",
                 method: "GET"
-            }),           
+            }),
         }),
         getSenderParcels: builder.query({
-            query: () =>({
+            query: () => ({
                 url: "/parcels/me",
                 method: "GET"
-            }),  
-             providesTags: ["PARCEL"],          
+            }),
+            providesTags: ["PARCEL"],
+        }),
+        // For Public 
+        publicParcelTracking: builder.query({
+            query: (trackingId: string) => ({
+                url: `/parcels/track/public/${trackingId}`,
+                method: "GET",
+            }),
+            providesTags: ["PARCEL"],
         }),
         // For Sender 
-         senderParcelTracking: builder.query({
-            query: (trackingId:string) =>({
+        senderParcelTracking: builder.query({
+            query: (trackingId: string) => ({
                 url: `/parcels/track/${trackingId}`,
                 method: "GET",
             }),
             providesTags: ["PARCEL"],
         }),
-          senderAnalytics: builder.query({
-            query: () =>({
+        senderAnalytics: builder.query({
+            query: () => ({
                 url: `/parcels/analytic`,
                 method: "GET",
             }),
@@ -69,4 +69,4 @@ export const parcelApi = baseApi.injectEndpoints({
 
 
 
-export const { useAddParcelMutation, useStatusLogsQuery, useCancelParcelMutation, useGetSenderParcelsQuery, useAllReceiversQuery, useStatusUpdateMutation, useSenderParcelTrackingQuery, useSenderAnalyticsQuery } = parcelApi
+export const { useAddParcelMutation, useStatusLogsQuery, useCancelParcelMutation, useGetSenderParcelsQuery, useAllReceiversQuery,  useSenderParcelTrackingQuery, useSenderAnalyticsQuery, usePublicParcelTrackingQuery } = parcelApi

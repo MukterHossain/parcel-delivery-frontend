@@ -9,7 +9,8 @@ export const authApi = baseApi.injectEndpoints({
                 url: "/auth/login",
                 method: "POST",
                 data: userInfo,
-            })
+            }),
+            invalidatesTags: ["USER"],            
         }),
         logout: builder.mutation({
             query: () =>({
@@ -23,21 +24,24 @@ export const authApi = baseApi.injectEndpoints({
                 url: "/user/register",
                 method: "POST",
                 data: userInfo,
-            })
+            }),
+            invalidatesTags: ["USER"],
         }),
         sendOtp: builder.mutation<IResponse<null>, ISendOtp>({
             query: (userInfo) =>({
                 url: "/otp/send",
                 method: "POST",
                 data: userInfo,
-            })
+            }),
+            invalidatesTags: ["USER"],
         }),
         verifyOtp: builder.mutation<IResponse<null>, IVerifyOtp>({
             query: (userInfo) =>({
                 url: "/otp/verify",
                 method: "POST",
                 data: userInfo,
-            })
+            }),
+            invalidatesTags: ["USER"],
         }),
         userInfo: builder.query({
             query: () =>({

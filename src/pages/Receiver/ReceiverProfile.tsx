@@ -1,11 +1,12 @@
 import { useUserInfoQuery } from "@/redux/feature/auth/auth.api"
 import photo from "@/assets/images/photo.jpg"
+import Loading from "@/loading/Loading"
 
 
 export default function ReceiverProfile() {
-  const { data: userInfo , isLoading} = useUserInfoQuery(undefined)
+  const { data: userInfo, isLoading } = useUserInfoQuery(undefined)
 
-    if(isLoading) return <div>Loading...</div>
+  if (isLoading) return <Loading></Loading>
   return (
     <div>
       <div className="max-w-lg mx-auto block text-muted-foreground  border border-gray-300 sm:p-6 mt-4 sm:mt-0 shadow p-5 bg-linear-to-r/srgb from-indigo-200 to-teal-300 hover:bg-linear-to-r/srgb hover:from-teal-300 hover:to-indigo-200 rounded-xl duration-500 ease-in-out">

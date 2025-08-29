@@ -17,7 +17,7 @@ interface IProps {
     children: ReactNode,
     onConfirm: () => void
 }
-export function DeleteConfirmation({children, onConfirm}:IProps) {
+export function ConfirmedDelivery({children, onConfirm}:IProps) {
 
     const handleConfirm=()=>{
         onConfirm()
@@ -27,10 +27,9 @@ export function DeleteConfirmation({children, onConfirm}:IProps) {
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure to cancel?</AlertDialogTitle>
+          <AlertDialogTitle>Are you sure to Confirm Delivery?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            Ensure before you confirm delivery. Check the status of the parcel before confirming 
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

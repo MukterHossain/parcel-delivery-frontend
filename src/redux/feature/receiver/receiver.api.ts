@@ -9,18 +9,19 @@ export const receiverApi = baseApi.injectEndpoints({
                 url: "/parcels/incoming",
                 method: "GET",
             }),
+            providesTags: ["PARCEL"],
         }),
         confirmDelivery: builder.mutation({
-            query: ({id, status}) =>({
+            query: ({id}) =>({
                 url: `/parcels/confirm-delivery/${id}`,
                 method: "PATCH",
-                data:{ status},
+                // data:{ status},
             }),
             invalidatesTags: ["PARCEL"],
         }),
          receiverAnalytics: builder.query({
             query: () =>({
-                url: `/parcels/Analytic`,
+                url: `/parcels/analytics`,
                 method: "GET",
             }),
             providesTags: ["PARCEL"],
